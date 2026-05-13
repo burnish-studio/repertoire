@@ -9,20 +9,20 @@ model: sonnet-4-6
 
 # File Naming
 
-All files must follow one of two naming patterns — enduring artifacts or point-in-time documents.
+All files must follow one of two naming patterns — enduring artefacts or point-in-time documents.
 
 ---
 
-## Enduring artifacts
+## Enduring artefacts
 
 Standards, skills, and templates are enduring — they have long lifespans, may be
 edited over time, and are canonical within the repository. Each lives in its own
 named directory.
 
-The directory name is the artifact identifier:
+The directory name is the artefact identifier:
 
 - Lowercase kebab-case
-- Describes what the artifact is, not when it was created
+- Describes what the artefact is, not when it was created
 - No date, no model identifier
 
 The file inside the directory is named by type, in uppercase:

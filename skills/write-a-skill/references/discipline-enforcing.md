@@ -9,6 +9,8 @@ model: sonnet-4-6
 
 # Discipline-Enforcing Skills
 
+_Perspective: [standards/perspective/STANDARD.md](../../standards/perspective/STANDARD.md)_
+
 _Reference file for `skills/write-a-skill/SKILL.md`. Load when writing or updating a
 discipline-enforcing skill — a skill that encodes a mandatory practice the agent must
 follow even under pressure._
@@ -22,7 +24,7 @@ Examples: test-driven development, systematic debugging, verification before com
 Discipline-enforcing skills govern practices the agent will be under pressure to skip:
 time pressure, sunk cost, apparent simplicity, authority from the user. A well-written
 technique skill will be followed; a poorly written discipline-enforcing skill will be
-followed when convenient and rationalized away under pressure. The design must account
+followed when convenient and rationalised away under pressure. The design must account
 for this.
 
 LLMs respond to the same persuasion mechanisms as humans because they are trained on
@@ -80,13 +82,13 @@ sycophancy and undermines honest feedback.
 ## Rationalization tables
 
 Run the target scenario without the skill present. Record exactly what the agent says
-to justify not following the rule. Every verbatim rationalization becomes a row in
+to justify not following the rule. Every verbatim rationalisation becomes a row in
 the table.
 
 This is not invented content — it is captured from observed failures and turned into
-explicit counters. The table works because the agent has seen these rationalization
+explicit counters. The table works because the agent has seen these rationalisation
 patterns followed by challenge in training data; the table activates the challenge
-response before the rationalization takes hold.
+response before the rationalisation takes hold.
 
 ```markdown
 ## Common rationalisations

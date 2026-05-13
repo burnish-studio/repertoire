@@ -13,7 +13,7 @@ The repertoire must at all times conform to its own standards.
 
 This is not a secondary concern — it is a defining property of a normative system. A
 rule set that does not follow its own rules is incoherent. Every file in this repertoire
-is simultaneously a rule that governs other documents and an artifact that must itself
+is simultaneously a rule that governs other documents and an artefact that must itself
 be governed by those rules.
 
 A violation anywhere in the set is a defect in the set, not just in the offending file.

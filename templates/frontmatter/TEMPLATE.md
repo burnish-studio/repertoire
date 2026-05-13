@@ -30,7 +30,7 @@ Required for all documents.
 
 | Field     | Meaning                                                        | Allowed values                                |
 | --------- | -------------------------------------------------------------- | --------------------------------------------- |
-| `type`    | The kind of artifact this document is                          | `skill` · `standard` · `template` · `context` |
+| `type`    | The kind of artefact this document is                          | `skill` · `standard` · `template` · `context` |
 | `title`   | Human-readable name for the document                           | Free text                                     |
 | `created` | Date first created. Set once — never updated.                  | ISO date `YYYY-MM-DD`                         |
 | `updated` | Date of most recent edit. Must be refreshed on every edit.     | ISO date `YYYY-MM-DD`                         |

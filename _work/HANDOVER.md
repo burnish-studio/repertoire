@@ -145,7 +145,7 @@ Read all four before building any backlog skill.
 
 ---
 
-## What was done this session
+## What was done last session (2026-05-13, previous)
 
 - **Benchmarked Superpowers** (`github.com/obra/superpowers`) — ten new findings
   captured in `_work/2026-05-13_benchmark-superpowers-01--sonnet-4-6.md`. Key additions:
@@ -171,8 +171,21 @@ Read all four before building any backlog skill.
   failure mode of collaboration; drops Deutschian jargon ("explanations") in favour of
   plain language.
 
-**Audit status:** not run this session. Run `skills/audit/SKILL.md` before touching any
-files.
+**Audit status:** run and clean. 7 findings fixed — see below.
+
+## What was done this session (2026-05-13, audit run)
+
+Audit run. 7 findings fixed, all mechanical:
+
+- **F1** `standards/document-metadata/STANDARD.md` — added missing perspective reference (used `you` without declaring convention)
+- **F2** `skills/write-a-skill/references/discipline-enforcing.md` — added missing perspective reference (same)
+- **F3** `standards/programming-paradigm/STANDARD.md` — converted bare imperatives to intent language (`must`/`must not`): "Write clear, direct prose" and "Do not write for a parser"
+- **F4** UK English: `artifact` → `artefact` across `standards/file-naming/`, `standards/self-consistency/`, `skills/codify/`, `templates/frontmatter/`, `skills/audit/`
+- **F5** UK English: `behavioral/Behavioral` → `behavioural/Behavioural` in `skills/write-a-skill/SKILL.md`
+- **F6** UK English: `rationalization/rationalized` → `rationalisation/rationalised` in `skills/write-a-skill/SKILL.md` and `references/discipline-enforcing.md`
+- **F7** UK English: `judgment` → `judgement` in `standards/programming-paradigm/`, `skills/audit/`, `skills/write-a-skill/SKILL.md`
+
+Repo is in a clean, self-consistent state.
 
 ---
 

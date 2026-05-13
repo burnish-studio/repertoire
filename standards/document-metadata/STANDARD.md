@@ -9,6 +9,8 @@ model: sonnet-4-6
 
 # Document Metadata
 
+_Perspective: [standards/perspective/STANDARD.md](../perspective/STANDARD.md)_
+
 All documents must open with a YAML frontmatter block. Metadata makes a document
 self-describing — it can be read, indexed, and handled correctly without depending
 on its location or surrounding context. A document without frontmatter requires

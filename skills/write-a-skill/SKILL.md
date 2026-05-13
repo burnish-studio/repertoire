@@ -27,7 +27,7 @@ is whether the content encodes something the agent would not know without being 
 **If the constraint is mechanically enforceable, automate it. Do not write a skill.**
 
 Documentation for something deterministically enforceable trains the agent to treat
-hard constraints as soft guidance. Skills are for judgment calls — non-obvious decisions,
+hard constraints as soft guidance. Skills are for judgement calls — non-obvious decisions,
 domain-specific traps, and context the agent cannot derive from general knowledge.
 
 Create a skill when:
@@ -56,7 +56,7 @@ Skill type governs what patterns to apply. Identify the type before writing.
 | **Discipline-enforcing** | Mandatory practice that must hold under pressure      | Rationalization tables; red flags lists — see `references/discipline-enforcing.md` |
 
 Most skills are techniques. Discipline-enforcing skills need substantially more
-anti-rationalization scaffolding than the others.
+anti-rationalisation scaffolding than the others.
 
 ---
 
@@ -111,7 +111,7 @@ tool names, domain vocabulary. The agent matches descriptions against what the u
 
 These govern every sentence in the skill body. Apply them as editing criteria.
 
-### Behavioral specificity
+### Behavioural specificity
 
 Every sentence must change a specific, observable behaviour. If a sentence could not
 fail — if no output would violate it — remove it.
@@ -280,6 +280,6 @@ observable behaviour or it is not there.
 - **You must not break self-containment by splitting.** If the primary file only works
   with the reference file, merge them.
 - **You must not include content that does not change observable behaviour.** Apply the
-  behavioral specificity test to every sentence. Vague aspirational rules ("be helpful",
+  behavioural specificity test to every sentence. Vague aspirational rules ("be helpful",
   "be thorough") are dead weight.
 - **You must not present a menu of equal options.** Name a default.

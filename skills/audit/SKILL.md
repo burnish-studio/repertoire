@@ -37,7 +37,7 @@ First pass: read all files as normative entities. Absorb what the set collective
 requires — every rule, constraint, and convention across all standards, skills, and
 templates.
 
-Second pass: read the same files as artifacts. Check each one against every applicable
+Second pass: read the same files as artefacts. Check each one against every applicable
 standard identified in the first pass. Record every violation precisely — file, standard
 breached, nature of the violation.
 
@@ -49,7 +49,7 @@ If a standard is unclear, that unclarity is itself a finding.
 
 Resolve every finding. For each violation, you must apply the correct fix as determined by the
 standards. You must not ask for input unless a finding involves a genuine decision — where
-the correct fix is ambiguous or has trade-offs that warrant my judgment. In that case,
+the correct fix is ambiguous or has trade-offs that warrant my judgement. In that case,
 you must surface the specific question clearly and wait for direction.
 
 When all fixes are applied, offer to produce a write-up of the session.

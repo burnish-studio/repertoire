@@ -34,13 +34,13 @@ entirely — use a script.
 
 The failure mode is over-specification: prescribing the how so completely that the agent
 executes your procedure rather than solving your problem. It cannot adapt when conditions
-differ from what you anticipated, and it cannot apply judgment you did not encode. The
+differ from what you anticipated, and it cannot apply judgement you did not encode. The
 result is rigid, verbose output that reflects your checklist rather than the actual task.
 This is the same error as micromanaging a capable person — their intelligence becomes
-irrelevant because you have substituted your procedure for their judgment.
+irrelevant because you have substituted your procedure for their judgement.
 
-Write clear, direct prose. The agent is calibrated on human communication. Do not write
-for a parser; do not fragment reasoning into bullets because it looks structured.
+You must write clear, direct prose. The agent is calibrated on human communication. You must not write
+for a parser; you must not fragment reasoning into bullets because it looks structured.
 
 ---
 
