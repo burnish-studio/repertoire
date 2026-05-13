@@ -9,6 +9,8 @@ model: sonnet-4-6
 
 # Intent Language
 
+_Perspective: [standards/perspective/STANDARD.md](../perspective/STANDARD.md)_
+
 Normative statements must use precise intent language — `must`, `should`, or `may` — so their weight is unambiguous to any reader.
 
 | Term         | Weight      | Meaning                                                       |

@@ -33,7 +33,7 @@ The file inside the directory is named by type, in uppercase:
 | Standard | `STANDARD.md` |
 | Template | `TEMPLATE.md` |
 
-Example: `standards/agentic-programming-paradigm/STANDARD.md`
+Example: `standards/programming-paradigm/STANDARD.md`
 
 Co-located assets — scripts, references, changelogs — live inside the same directory
 alongside the primary file.

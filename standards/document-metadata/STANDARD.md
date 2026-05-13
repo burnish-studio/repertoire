@@ -17,4 +17,4 @@ ambient knowledge to interpret and is not complete.
 The required fields, their meanings, and their allowed values are defined in
 `templates/frontmatter/TEMPLATE.md`. That template is the authority on form.
 
-Where a field value cannot be determined, apply `standards/unknown-values/STANDARD.md`.
+Where a field value cannot be determined, you must apply `standards/unknown-values/STANDARD.md`.

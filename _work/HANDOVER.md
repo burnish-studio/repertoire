@@ -53,10 +53,17 @@ The test for where something belongs:
 
 ## Governing philosophy
 
-Everything here is built on the agentic programming paradigm. Read
-`standards/agentic-programming-paradigm/STANDARD.md` before contributing anything.
+Three short standards cover the philosophical foundation. They are intentionally brief.
+Do not expand them without explicit instruction.
 
-**This standard needs to be rewritten.** See settled decisions and build queue below.
+- `standards/fallibilism/` — no idea is above challenge; fallibilism as an optimistic
+  stance; sycophancy named as the failure mode of collaboration
+- `standards/programming-paradigm/` — the most important standard; when intelligence is
+  in the execution layer, specify intent not procedure; over-specification (the
+  micromanagement error) named as the failure mode
+- `standards/collaboration/` — human and agent as peers; human brings unique insight and
+  taste, not gospel authority; agent may know better; half of collaboration is doing,
+  half is discovering while doing
 
 ---
 
@@ -74,23 +81,10 @@ Everything here is built on the agentic programming paradigm. Read
 - The repertoire is self-applying. Every standard must be followed by every file in
   the repo, including the standards themselves.
 - UK English throughout.
-
-### Paradigm-2 — settled but needs sharper framing
-
-The prohibition on procedure has been clarified this session. The correct test is not
-"does this look like steps?" but **"would a competent agent already know this?"** If
-yes, omit. If no, say it — in whatever form serves the communication. Domain-specific
-non-obvious insight belongs in a skill even if it is structured. Generic procedure
-the agent can derive does not.
-
-The deeper framing: the relationship between agent and human is not
-specification → execution. It is **conjecture → criticism → better conjecture**
-(Deutsch/Popper). The agent is a participant in knowledge growth, not an executor of
-fixed intent. The human is not a gospel source of rigid specification — they are a
-generative engine. Even the ends are subject to revision and improvement.
-
-This framing must be reflected in `agentic-programming-paradigm` and in any new
-standards written this session.
+- Standard directory names are concise: `fallibilism`, `collaboration`,
+  `programming-paradigm` — not `fallibilism-and-epistemology` etc.
+- The philosophical standards are kept short deliberately. Do not expand them without
+  explicit instruction.
 
 ### Standard structure — settled
 
@@ -101,25 +95,24 @@ Every standard has two parts:
 2. **Thesis** — rationale and elaboration. Adds reasoning. Does not restate the norm.
    Required for understanding, application to edge cases, and error-correction.
 
-This is the law-operative / law-rationale distinction. The norm is what is enforced;
-the thesis is what enables the norm to be understood and disputed.
-
 ---
 
 ## Current state of the repo
 
 ### Standards
 
-| Directory                       | Purpose                                                              |
-| ------------------------------- | -------------------------------------------------------------------- |
-| `agentic-programming-paradigm/` | The philosophical foundation. **Needs rewrite — see build queue.**   |
-| `document-metadata/`            | All documents must have complete frontmatter.                        |
-| `file-naming/`                  | Enduring artifacts vs point-in-time documents — two naming patterns. |
-| `intent-language/`              | Must / should / may — normative weight.                              |
-| `perspective/`                  | I/me = user, you/your = agent.                                       |
-| `self-consistency/`             | The repertoire must conform to its own standards at all times.       |
-| `self-contained-files/`         | Every file must be intelligible cold.                                |
-| `unknown-values/`               | Sentinel values: `unknown` / `n/a`.                                  |
+| Directory               | Purpose                                                                     |
+| ----------------------- | --------------------------------------------------------------------------- |
+| `collaboration/`        | Human-agent peer relationship; taste and judgment as input not gospel.      |
+| `document-metadata/`    | All documents must have complete frontmatter.                               |
+| `fallibilism/`          | No idea is above challenge; fallibilism; sycophancy as failure mode.        |
+| `file-naming/`          | Enduring artifacts vs point-in-time documents — two naming patterns.        |
+| `intent-language/`      | Must / should / may — normative weight.                                     |
+| `perspective/`          | I/me = user, you/your = agent.                                              |
+| `programming-paradigm/` | Intent not procedure; over-specification (micromanagement) as failure mode. |
+| `self-consistency/`     | The repertoire must conform to its own standards at all times.              |
+| `self-contained-files/` | Every file must be intelligible cold.                                       |
+| `unknown-values/`       | Sentinel values: `unknown` / `n/a`.                                         |
 
 ### Templates
 
@@ -129,82 +122,67 @@ the thesis is what enables the norm to be understood and disputed.
 
 ### Skills
 
-| Directory           | Purpose                                                               |
-| ------------------- | --------------------------------------------------------------------- |
-| `write-a-skill/`    | How to write a skill. Needs update after agentskills.io benchmark.    |
-| `write-a-standard/` | How to write a standard. New this session. Use for all new standards. |
-| `audit/`            | Two-phase conformance check — diagnose then fix.                      |
-| `codify/`           | Place a discussed concept correctly into the repertoire.              |
+| Directory           | Purpose                                                  |
+| ------------------- | -------------------------------------------------------- |
+| `write-a-skill/`    | How to write a skill. Updated this session — current.    |
+| `write-a-standard/` | How to write a standard.                                 |
+| `audit/`            | Two-phase conformance check — diagnose then fix.         |
+| `codify/`           | Place a discussed concept correctly into the repertoire. |
+
+`write-a-skill/` now has a `references/discipline-enforcing.md` file covering
+rationalization tables, red flags lists, and persuasion mechanisms for that skill type.
 
 ### Research output
 
-| File                                                       | Contents                                                           |
-| ---------------------------------------------------------- | ------------------------------------------------------------------ |
-| `_work/2026-05-13_benchmark-matt-pocock-01--sonnet-4-6.md` | Matt Pocock skills benchmark. Read before building backlog skills. |
+| File                                                          | Contents                                            |
+| ------------------------------------------------------------- | --------------------------------------------------- |
+| `_work/2026-05-13_benchmark-matt-pocock-01--sonnet-4-6.md`    | Matt Pocock skills benchmark.                       |
+| `_work/2026-05-13_benchmark-agentskills-io-01--sonnet-4-6.md` | agentskills.io benchmark.                           |
+| `_work/2026-05-13_benchmark-superpowers-01--sonnet-4-6.md`    | Superpowers (obra) benchmark. New this session.     |
+| `_work/2026-05-13_benchmark-openclaw-01--sonnet-4-6.md`       | OpenClaw (Steinberger) benchmark. New this session. |
+
+Read all four before building any backlog skill.
+
+---
+
+## What was done this session
+
+- **Benchmarked Superpowers** (`github.com/obra/superpowers`) — ten new findings
+  captured in `_work/2026-05-13_benchmark-superpowers-01--sonnet-4-6.md`. Key additions:
+  description-as-workflow-summary is a tested failure mode; rationalization tables; red
+  flags lists; persuasion principles as design tool; skill type taxonomy; when not to
+  create a skill.
+- **Benchmarked OpenClaw** (Steinberger) — four principles captured in
+  `_work/2026-05-13_benchmark-openclaw-01--sonnet-4-6.md`. Key addition: the behavioral
+  specificity test — every sentence must change a specific, observable behaviour; if it
+  cannot fail, remove it.
+- **Updated `skills/write-a-skill/SKILL.md`** — substantial rewrite incorporating all
+  four benchmarks. New sections: when not to create a skill; skill type taxonomy;
+  description field guidance (including workflow-summary prohibition); content principles
+  (behavioral specificity, competent-agent test, match specificity to fragility, defaults
+  not menus, effort prioritisation); content patterns (gotchas, output format, named
+  anti-patterns, before/after examples); iteration as a maintenance practice.
+- **Updated `standards/programming-paradigm/STANDARD.md`** — replaced the sycophancy
+  paragraph (wrong failure mode for this standard) with the correct failure mode:
+  over-specification producing rigidity and brittleness, same error as micromanaging a
+  capable person.
+- **Renamed `standards/epistemology/` → `standards/fallibilism/`** and rewrote the
+  standard. Now leads with fallibilism as the normative stance; names sycophancy as the
+  failure mode of collaboration; drops Deutschian jargon ("explanations") in favour of
+  plain language.
+
+**Audit status:** not run this session. Run `skills/audit/SKILL.md` before touching any
+files.
 
 ---
 
 ## Build queue — in dependency order
 
-### 1. `standards/epistemology-of-knowledge-growth/` — NEW
+### 1. Skills backlog ← START HERE
 
-A standalone standard for the Deutsch/Popper epistemological foundation. General
-enough to stand on its own — not specific to agentic programming. Covers:
-
-- Knowledge grows through conjecture and criticism, not through authority or procedure
-- Error-correction as the fundamental epistemic mechanism
-- No source is authoritative — only explanations that have survived criticism
-- Substrate independence: what matters is the abstract structure, not the encoding
-- The implication: participants in any knowledge-creating enterprise are peers in a
-  conjecture-criticism loop, not authority and executor
-
-This standard is the foundation. Everything else derives from it.
-
-### 2. `standards/agentic-programming-paradigm/` — REWRITE
-
-Rewrite to reference `epistemology-of-knowledge-growth` and derive from it. The
-practical implications of the epistemology in the specific context of programming
-with agents. Key points to land:
-
-- The correct heuristic: write to the agent as a competent intelligent human
-- The test for what to include: would a competent agent already know this?
-- The relationship is conjecture → criticism → better conjecture, not
-  specification → execution
-- Domain-specific non-obvious insight belongs even if it looks procedural
-- Generic procedure the agent can derive does not belong
-
-### 3. `standards/collaborative-epistemology/` — NEW
-
-The human-agent relationship model. Distinct from the paradigm standard (which is
-about the agent) — this is about the collaboration. Key points:
-
-- The human is not a fixed source of specification; they are a generative engine
-- Even ends are subject to revision and improvement
-- The right orientation: characterise what makes a good end, not specify a fixed end
-- Characterisation of quality is more powerful than specification of output
-
-### 4. Benchmark agentskills.io
-
-Review agentskills.io for skill quality standards and description field guidance.
-Capture findings in `_work/` using the same pattern as the Matt Pocock benchmark.
-Do this before updating `write-a-skill`.
-
-### 5. `skills/write-a-skill/` — UPDATE
-
-Update after the agentskills.io benchmark. Changes expected based on Matt Pocock
-benchmark findings:
-
-- The competent-human heuristic
-- Named anti-patterns with causal explanation
-- Explicit effort prioritisation where relevant
-- Concrete output format specification when a skill has a defined output
-- Before/after examples for non-obvious rules
-
-### 6. Skills backlog
-
-Build these against the updated foundation. Matt Pocock's deprecated
-`ubiquitous-language` is the best external benchmark for that skill specifically —
-read it before building.
+`write-a-skill` is done. Read all four benchmarks before building any of these.
+Matt Pocock's deprecated `ubiquitous-language` is the best external benchmark for that
+skill specifically.
 
 - `grill-me` — keep it simple; risk is over-engineering
 - `ubiquitous-language` — needs output format, rules, example dialogue; richest of the set
@@ -213,13 +191,13 @@ read it before building.
 - `grill-you` — user interrogates the agent about its own nature or tendencies
 - `introspect` — agent conducts structured self-reflection on a topic
 
-### 7. Bibliography convention
+### 2. Bibliography convention
 
 Formalise where references to external sources live (distinct from reference files
 the agent loads). Options: `REFERENCES.md` in skill/standard directory, or a
 `sources` extended frontmatter field. Decide and add to a standard.
 
-### 8. Open-shop / close-shop with the plate
+### 3. Open-shop / close-shop with the plate
 
 Open-shop spins up a session temp folder (`_work/plate-{date}/` or similar). All
 in-session artifacts land there. Close-shop processes the folder — promotes permanent
@@ -250,3 +228,6 @@ whatever mechanism is implemented above.
 - Matt Pocock skills repo is cloned at `/tmp/pi-github-repos/mattpocock/skills` —
   may not persist across sessions; re-fetch from `https://github.com/mattpocock/skills/`
   if needed
+- Superpowers repo is cloned at `/tmp/pi-github-repos/obra/superpowers` — may not
+  persist across sessions; re-fetch from `https://github.com/obra/superpowers/` if needed
+- Audit was NOT run at the end of this session — run it before making any changes
