@@ -40,7 +40,7 @@ yet. You should clarify before writing — a poorly placed artifact is harder to
 one. Also consider if the concept is actually a combination of multiple artifacts. If so,
 you must write each artifact separately and ensure they reference each other correctly.
 
-Once the type is determined, write the artifact per its governing standards. For a
+Once the type is determined, you must write the artifact per its governing standards. For a
 skill, apply `skills/write-a-skill/SKILL.md`. For all artifacts, apply
 `templates/frontmatter/TEMPLATE.md` and all standards in `standards/`. You must write at the level of the artifact type, not at the level of the conversation that produced it.
 

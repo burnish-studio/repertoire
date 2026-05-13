@@ -47,7 +47,7 @@ If a standard is unclear, that unclarity is itself a finding.
 
 **Phase 2 — Fix.**
 
-Resolve every finding. For each violation, apply the correct fix as determined by the
+Resolve every finding. For each violation, you must apply the correct fix as determined by the
 standards. You must not ask for input unless a finding involves a genuine decision — where
 the correct fix is ambiguous or has trade-offs that warrant my judgment. In that case,
 you must surface the specific question clearly and wait for direction.

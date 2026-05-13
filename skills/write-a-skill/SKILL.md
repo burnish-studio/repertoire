@@ -69,7 +69,7 @@ skill-name/
   scripts/          ← deterministic utilities
 ```
 
-**Scripts:** use when the operation is deterministic and would otherwise be regenerated
+**Scripts:** you should use these when the operation is deterministic and would otherwise be regenerated
 identically each session. Generated code varies; scripts are stable.
 
 **Splitting files:** appropriate when secondary content is reference material the agent

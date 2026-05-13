@@ -72,7 +72,7 @@ there_. The former is always legitimate. The latter is only legitimate when the 
 itself the constraint — when there is genuinely one acceptable path and it must be
 named.
 
-Where determinism is the actual requirement, remove the operation from agentic judgment
+Where determinism is the actual requirement, you should remove the operation from agentic judgment
 entirely. A script that always produces the same output from the same input is the right
 tool for that. Putting it inside agentic reasoning introduces variability where
 variability is the enemy. This is judgment, not a rule — in the same way that holding a

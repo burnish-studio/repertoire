@@ -21,7 +21,7 @@ A file that only makes sense with prior knowledge of a session or project is not
 
 ## References
 
-Explicit references are permitted and encouraged where a file depends on another. A
+Explicit references are permitted and should be used where a file depends on another. A
 reference must name the file it depends on. The dependency must be resolvable — a
 reader must be able to find and load the referenced file without further guidance.
 

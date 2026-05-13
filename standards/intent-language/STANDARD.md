@@ -18,7 +18,7 @@ Normative statements must use precise intent language — `must`, `should`, or `
 | **should**   | Recommended | Strong preference. Deviations require explicit justification. |
 | **may**      | Optional    | Permitted but not required. No justification needed.          |
 
-Use the lowest weight that accurately reflects the intent. Overuse of _must_ dilutes
+You must use the lowest weight that accurately reflects the intent. Overuse of _must_ dilutes
 its force. If everything is mandatory, nothing is.
 
 These terms also govern agent discretion. _Must_ admits no deviation. _Should_ permits

@@ -16,5 +16,4 @@ When a field value cannot be determined, a sentinel value must be used — never
 | Value exists but cannot be retrieved  | `unknown` |
 | Field does not apply to this document | `n/a`     |
 
-These are the only two permitted substitutes for a real value. Do not invent
-alternatives.
+These are the only two permitted substitutes for a real value. Alternatives must not be invented.
