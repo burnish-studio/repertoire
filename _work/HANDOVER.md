@@ -9,7 +9,7 @@ model: sonnet-4-6
 
 # Repertoire — Handover
 
-_Perspective: [standards/perspective.md](../standards/perspective/STANDARD.md)_
+_Perspective: [standards/perspective/STANDARD.md](../standards/perspective/STANDARD.md)_
 
 Read this in full before doing anything. Do not re-litigate settled decisions.
 
@@ -20,6 +20,9 @@ Read this in full before doing anything. Do not re-litigate settled decisions.
 Repertoire is a collection of general-purpose agent skills, standards, and templates
 for intelligent agent work. It is a standalone base layer — no dependencies on any
 framework or downstream project. It builds on nothing; others build on it.
+
+It is layer-one tooling for a broader system: Repertoire → Station AI → Doti. Getting
+it right matters because errors here propagate up the entire stack.
 
 ---
 
@@ -52,14 +55,14 @@ The test for where something belongs:
 
 Everything here is built on the agentic programming paradigm. Read
 `standards/agentic-programming-paradigm/STANDARD.md` before contributing anything.
-It is the philosophical foundation — short and essential.
+
+**This standard needs to be rewritten.** See settled decisions and build queue below.
 
 ---
 
 ## What is settled — do not re-litigate
 
 - Repertoire is standalone. No framework-specific concepts from any downstream project.
-- Skills are paradigm-2 briefings. Specify intent and outcome. Procedure must not be specified.
 - The `description` field in skill frontmatter must describe both what the skill does
   and when to use it. Trigger conditions alone are insufficient.
 - Standards use descriptive titles, not coined names.
@@ -72,6 +75,35 @@ It is the philosophical foundation — short and essential.
   the repo, including the standards themselves.
 - UK English throughout.
 
+### Paradigm-2 — settled but needs sharper framing
+
+The prohibition on procedure has been clarified this session. The correct test is not
+"does this look like steps?" but **"would a competent agent already know this?"** If
+yes, omit. If no, say it — in whatever form serves the communication. Domain-specific
+non-obvious insight belongs in a skill even if it is structured. Generic procedure
+the agent can derive does not.
+
+The deeper framing: the relationship between agent and human is not
+specification → execution. It is **conjecture → criticism → better conjecture**
+(Deutsch/Popper). The agent is a participant in knowledge growth, not an executor of
+fixed intent. The human is not a gospel source of rigid specification — they are a
+generative engine. Even the ends are subject to revision and improvement.
+
+This framing must be reflected in `agentic-programming-paradigm` and in any new
+standards written this session.
+
+### Standard structure — settled
+
+Every standard has two parts:
+
+1. **Operative norm** — the binding statement. One to three sentences. Stands alone.
+   Injectable — compact enough to be useful in a context window without the thesis.
+2. **Thesis** — rationale and elaboration. Adds reasoning. Does not restate the norm.
+   Required for understanding, application to edge cases, and error-correction.
+
+This is the law-operative / law-rationale distinction. The norm is what is enforced;
+the thesis is what enables the norm to be understood and disputed.
+
 ---
 
 ## Current state of the repo
@@ -80,7 +112,7 @@ It is the philosophical foundation — short and essential.
 
 | Directory                       | Purpose                                                              |
 | ------------------------------- | -------------------------------------------------------------------- |
-| `agentic-programming-paradigm/` | The philosophical foundation. Read first.                            |
+| `agentic-programming-paradigm/` | The philosophical foundation. **Needs rewrite — see build queue.**   |
 | `document-metadata/`            | All documents must have complete frontmatter.                        |
 | `file-naming/`                  | Enduring artifacts vs point-in-time documents — two naming patterns. |
 | `intent-language/`              | Must / should / may — normative weight.                              |
@@ -97,53 +129,114 @@ It is the philosophical foundation — short and essential.
 
 ### Skills
 
-| Directory        | Purpose                                                       |
-| ---------------- | ------------------------------------------------------------- |
-| `write-a-skill/` | How to write a skill. Use for all subsequent skill authoring. |
-| `audit/`         | Two-phase conformance check — diagnose then fix.              |
-| `codify/`        | Place a discussed concept correctly into the repertoire.      |
+| Directory           | Purpose                                                               |
+| ------------------- | --------------------------------------------------------------------- |
+| `write-a-skill/`    | How to write a skill. Needs update after agentskills.io benchmark.    |
+| `write-a-standard/` | How to write a standard. New this session. Use for all new standards. |
+| `audit/`            | Two-phase conformance check — diagnose then fix.                      |
+| `codify/`           | Place a discussed concept correctly into the repertoire.              |
+
+### Research output
+
+| File                                                       | Contents                                                           |
+| ---------------------------------------------------------- | ------------------------------------------------------------------ |
+| `_work/2026-05-13_benchmark-matt-pocock-01--sonnet-4-6.md` | Matt Pocock skills benchmark. Read before building backlog skills. |
 
 ---
 
-## What to build next
+## Build queue — in dependency order
 
-### Skills backlog (in no particular order)
+### 1. `standards/epistemology-of-knowledge-growth/` — NEW
 
+A standalone standard for the Deutsch/Popper epistemological foundation. General
+enough to stand on its own — not specific to agentic programming. Covers:
+
+- Knowledge grows through conjecture and criticism, not through authority or procedure
+- Error-correction as the fundamental epistemic mechanism
+- No source is authoritative — only explanations that have survived criticism
+- Substrate independence: what matters is the abstract structure, not the encoding
+- The implication: participants in any knowledge-creating enterprise are peers in a
+  conjecture-criticism loop, not authority and executor
+
+This standard is the foundation. Everything else derives from it.
+
+### 2. `standards/agentic-programming-paradigm/` — REWRITE
+
+Rewrite to reference `epistemology-of-knowledge-growth` and derive from it. The
+practical implications of the epistemology in the specific context of programming
+with agents. Key points to land:
+
+- The correct heuristic: write to the agent as a competent intelligent human
+- The test for what to include: would a competent agent already know this?
+- The relationship is conjecture → criticism → better conjecture, not
+  specification → execution
+- Domain-specific non-obvious insight belongs even if it looks procedural
+- Generic procedure the agent can derive does not belong
+
+### 3. `standards/collaborative-epistemology/` — NEW
+
+The human-agent relationship model. Distinct from the paradigm standard (which is
+about the agent) — this is about the collaboration. Key points:
+
+- The human is not a fixed source of specification; they are a generative engine
+- Even ends are subject to revision and improvement
+- The right orientation: characterise what makes a good end, not specify a fixed end
+- Characterisation of quality is more powerful than specification of output
+
+### 4. Benchmark agentskills.io
+
+Review agentskills.io for skill quality standards and description field guidance.
+Capture findings in `_work/` using the same pattern as the Matt Pocock benchmark.
+Do this before updating `write-a-skill`.
+
+### 5. `skills/write-a-skill/` — UPDATE
+
+Update after the agentskills.io benchmark. Changes expected based on Matt Pocock
+benchmark findings:
+
+- The competent-human heuristic
+- Named anti-patterns with causal explanation
+- Explicit effort prioritisation where relevant
+- Concrete output format specification when a skill has a defined output
+- Before/after examples for non-obvious rules
+
+### 6. Skills backlog
+
+Build these against the updated foundation. Matt Pocock's deprecated
+`ubiquitous-language` is the best external benchmark for that skill specifically —
+read it before building.
+
+- `grill-me` — keep it simple; risk is over-engineering
+- `ubiquitous-language` — needs output format, rules, example dialogue; richest of the set
+- `caveman` — persistence rules, auto-clarity exception, before/after examples
 - `write-up` — capture a completed session into a structured document
-- `grill-me` — interrogate a plan or design until it is robust
 - `grill-you` — user interrogates the agent about its own nature or tendencies
 - `introspect` — agent conducts structured self-reflection on a topic
-- `ubiquitous-language` — extract a DDD-style ubiquitous language glossary
-- `caveman` — compressed communication mode; minimal tokens
 
-### Research task — quality benchmarking
+### 7. Bibliography convention
 
-Before adding further skills, check the current work against high-quality external
-references. The goal is to ensure our skills have the same precision and sting as the
-best examples online, while maintaining the paradigm-2 framing.
+Formalise where references to external sources live (distinct from reference files
+the agent loads). Options: `REFERENCES.md` in skill/standard directory, or a
+`sources` extended frontmatter field. Decide and add to a standard.
 
-References to review:
+### 8. Open-shop / close-shop with the plate
 
-- **Matt Pocock's skills** — known for sharp, effective agent skills; look for how
-  specificity and clarity are achieved without procedural enumeration
-- **Superpowers repo** — review skills and content for structural and stylistic insights
-- **agentskills.io** — the specification we deferred to on description field guidance;
-  review best practice examples and recommendations
-- **Anthropic / Claude docs (openclaw)** — best practices for prompting and briefing
-  agents; particularly relevant for how to write with authority and precision
+Open-shop spins up a session temp folder (`_work/plate-{date}/` or similar). All
+in-session artifacts land there. Close-shop processes the folder — promotes permanent
+content, cleans ephemeral content. The plate is the staging area for live session
+work. Detail to be worked out when building the skills.
 
-What to look for: how the best examples achieve domain sharpness and specificity while
-remaining briefings rather than procedures. Our paradigm-2 stance is not a licence for
-vagueness — the content must have the same power as the best procedural equivalents,
-just framed correctly: writing to a human expert, not programming a parser.
+---
 
-Where we expect to deviate: anything that implies step enumeration or checklist
-structure. Hold our approach; evaluate whether the insight can be expressed in
-paradigm-2 terms instead.
+## Standards structure note
 
-### Templates
-
-Do not design ahead of need. Templates will emerge from building skills.
+Standards are always-applicable — not loaded on demand like skills. Their volume
+therefore has a token cost in every context. Standards should be concise by design.
+The norm/thesis structure helps: the norm is compact and injectable; the thesis is
+available but not always needed. Future consideration: a mechanism to inject only
+the operative norms of all standards. This is a harness/layer concern, not
+a repertoire concern — the repertoire just needs to make its content usable by
+whatever mechanism is implemented above.
 
 ---
 
@@ -154,3 +247,6 @@ Do not design ahead of need. Templates will emerge from building skills.
 - Tone: direct, no fluff, technically precise
 - Run `skills/audit/SKILL.md` at the start of any session where files have been touched
   since the last audit
+- Matt Pocock skills repo is cloned at `/tmp/pi-github-repos/mattpocock/skills` —
+  may not persist across sessions; re-fetch from `https://github.com/mattpocock/skills/`
+  if needed
