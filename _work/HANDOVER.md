@@ -1,15 +1,15 @@
 ---
 type: context
 title: Repertoire — Handover
-created: 2026-05-12
-updated: 2026-05-12
+created: 2026-05-13
+updated: 2026-05-13
 status: current
 model: sonnet-4-6
 ---
 
 # Repertoire — Handover
 
-_Perspective: [standards/perspective.md](standards/perspective.md)_
+_Perspective: [standards/perspective.md](../standards/perspective/STANDARD.md)_
 
 Read this in full before doing anything. Do not re-litigate settled decisions.
 
@@ -21,114 +21,93 @@ Repertoire is a collection of general-purpose agent skills, standards, and templ
 for intelligent agent work. It is a standalone base layer — no dependencies on any
 framework or downstream project. It builds on nothing; others build on it.
 
-The dependency relationship for context only:
-
-```
-repertoire          ← this repo
-    ↓
-station-ai          ← framework for AI-native systems
-    ↓
-doti                ← AI personhood project
-```
-
-Repertoire is indifferent to all of this. It is written for any agent, any harness,
-any project.
-
 ---
 
 ## Three artifact types
 
 ```
 skills/{name}/
-  SKILL.md
-  CHANGELOG.md      ← optional
-  _work/            ← research and notes; not deployed
+  SKILL.md          ← always required
+  scripts/          ← deterministic utilities; co-located
+  references/       ← supplementary material; loaded on demand
 
-standards/{name}.md
+standards/{name}/
+  STANDARD.md
 
-templates/{name}.md
+templates/{name}/
+  TEMPLATE.md
 ```
 
-The ontology: standards say _ought_, skills say _do_, templates say _is_. This
-distinction matters — do not blur it.
+The ontology: standards say _ought_, skills say _do_, templates say _is_.
+
+The test for where something belongs:
+
+- Does this govern how things should be done generally? → standard
+- Does this describe a repeatable action with an output? → skill
+- Does this show correct form for something? → template
 
 ---
 
 ## Governing philosophy
 
-Everything here is built on the agentic programming paradigm. Read `standards/agentic-programming-paradigm.md`
-before contributing anything. It is short.
+Everything here is built on the agentic programming paradigm. Read
+`standards/agentic-programming-paradigm/STANDARD.md` before contributing anything.
+It is the philosophical foundation — short and essential.
 
 ---
 
 ## What is settled — do not re-litigate
 
-- Repertoire is standalone. No Station AI concepts (stations, inboxes, HQ, soul, heart).
-  If you find yourself writing about any of those, stop — you are in the wrong repo.
-- Skills are paradigm-2 briefings. No step lists. No procedure. Intent and outcome only.
-- The `description` field in skill frontmatter states trigger conditions only — never a
-  capability summary. A capability summary causes the agent to act on the description
-  instead of loading the full skill. This defeats the purpose.
-- Standards use descriptive titles, not coined names. The standards folder must be
-  scannable without prior knowledge.
+- Repertoire is standalone. No framework-specific concepts from any downstream project.
+- Skills are paradigm-2 briefings. Specify intent and outcome. Procedure must not be specified.
+- The `description` field in skill frontmatter must describe both what the skill does
+  and when to use it. Trigger conditions alone are insufficient.
+- Standards use descriptive titles, not coined names.
 - Any document whose body uses `I`, `me`, `you`, or `your` must reference
-  `standards/perspective.md` immediately under the h1.
-- Intent language (`must`, `should`, `may`) must be applied consistently per
-  `standards/intent-language.md`. Do not use "ought to", "ideally", or similar
-  ambiguous phrasing in normative statements.
+  `standards/perspective/STANDARD.md` immediately under the h1.
+- Normative statements must use intent language per `standards/intent-language/STANDARD.md`.
+  This applies to all artifact types without exception.
+- All enduring artifacts follow the directory pattern: `{type-plural}/{name}/UPPERCASE.md`.
+- The repertoire is self-applying. Every standard must be followed by every file in
+  the repo, including the standards themselves.
 - UK English throughout.
 
 ---
 
-## What has been built
+## Current state of the repo
 
 ### Standards
 
-All seven standards are written and current.
-
-| File                              | Purpose                                                                           |
-| --------------------------------- | --------------------------------------------------------------------------------- |
-| `agentic-programming-paradigm.md` | The agentic programming paradigm — the philosophical foundation. Read this first. |
-| `perspective.md`                  | Pronoun convention: I/me = user, you/your = agent.                                |
-| `intent-language.md`              | Must / should / may — normative weight and agent discretion.                      |
-| `self-contained-files.md`         | Files must be intelligible cold, with no ambient context.                         |
-| `document-metadata.md`            | Required frontmatter fields for all documents.                                    |
-| `file-naming.md`                  | Naming conventions for repo artifacts and output documents.                       |
-| `unknown-values.md`               | Sentinel values for unresolvable or inapplicable fields: `unknown` / `n/a`.       |
+| Directory                       | Purpose                                                              |
+| ------------------------------- | -------------------------------------------------------------------- |
+| `agentic-programming-paradigm/` | The philosophical foundation. Read first.                            |
+| `document-metadata/`            | All documents must have complete frontmatter.                        |
+| `file-naming/`                  | Enduring artifacts vs point-in-time documents — two naming patterns. |
+| `intent-language/`              | Must / should / may — normative weight.                              |
+| `perspective/`                  | I/me = user, you/your = agent.                                       |
+| `self-consistency/`             | The repertoire must conform to its own standards at all times.       |
+| `self-contained-files/`         | Every file must be intelligible cold.                                |
+| `unknown-values/`               | Sentinel values: `unknown` / `n/a`.                                  |
 
 ### Templates
 
-| File                       | Purpose                                                               |
-| -------------------------- | --------------------------------------------------------------------- |
-| `templates/frontmatter.md` | Base frontmatter block. Copy and complete per `document-metadata.md`. |
+| Directory      | Purpose                                             |
+| -------------- | --------------------------------------------------- |
+| `frontmatter/` | Copyable frontmatter block with field descriptions. |
 
 ### Skills
 
-None yet. This is the next area of work.
+| Directory        | Purpose                                                       |
+| ---------------- | ------------------------------------------------------------- |
+| `write-a-skill/` | How to write a skill. Use for all subsequent skill authoring. |
+| `audit/`         | Two-phase conformance check — diagnose then fix.              |
+| `codify/`        | Place a discussed concept correctly into the repertoire.      |
 
 ---
 
 ## What to build next
 
-### Immediate: port `write-a-skill`
-
-The first skill to land must be `write-a-skill`. It is the tool used to write all
-subsequent skills. Port it from:
-
-```
-~/burnish-projects/station-ai/skills/write-a-skill/SKILL.md
-```
-
-Port it by hand — we do not yet have the skill to use for writing it. Once it is here,
-use it for everything that follows. The station-ai copy becomes a reference to this one.
-
-The existing content is reproduced in the original `HANDOVER.md` if needed, but reading
-the source file directly is preferable.
-
-Key things to check on port: strip any Station AI concepts, ensure frontmatter meets
-`standards/document-metadata.md`, confirm the description is trigger conditions only.
-
-### Skills to write (in no particular order after `write-a-skill`)
+### Skills backlog (in no particular order)
 
 - `write-up` — capture a completed session into a structured document
 - `grill-me` — interrogate a plan or design until it is robust
@@ -137,20 +116,34 @@ Key things to check on port: strip any Station AI concepts, ensure frontmatter m
 - `ubiquitous-language` — extract a DDD-style ubiquitous language glossary
 - `caveman` — compressed communication mode; minimal tokens
 
+### Research task — quality benchmarking
+
+Before adding further skills, check the current work against high-quality external
+references. The goal is to ensure our skills have the same precision and sting as the
+best examples online, while maintaining the paradigm-2 framing.
+
+References to review:
+
+- **Matt Pocock's skills** — known for sharp, effective agent skills; look for how
+  specificity and clarity are achieved without procedural enumeration
+- **Superpowers repo** — review skills and content for structural and stylistic insights
+- **agentskills.io** — the specification we deferred to on description field guidance;
+  review best practice examples and recommendations
+- **Anthropic / Claude docs (openclaw)** — best practices for prompting and briefing
+  agents; particularly relevant for how to write with authority and precision
+
+What to look for: how the best examples achieve domain sharpness and specificity while
+remaining briefings rather than procedures. Our paradigm-2 stance is not a licence for
+vagueness — the content must have the same power as the best procedural equivalents,
+just framed correctly: writing to a human expert, not programming a parser.
+
+Where we expect to deviate: anything that implies step enumeration or checklist
+structure. Hold our approach; evaluate whether the insight can be expressed in
+paradigm-2 terms instead.
+
 ### Templates
 
-Do not design ahead of need. Templates will emerge from building the skills. The first
-will likely be an output document template and a session write-up template.
-
----
-
-## What is open
-
-- Repo name — "repertoire" is confirmed working; may be formalised later.
-- Sub-namespacing (`skills/writing/`, `skills/productivity/`) — not needed yet; revisit
-  when the flat list becomes unwieldy.
-- Whether a `file-naming` skill and `frontmatter` skill are needed, or whether the
-  standards and templates are sufficient on their own.
+Do not design ahead of need. Templates will emerge from building skills.
 
 ---
 
@@ -159,4 +152,5 @@ will likely be an output document template and a session write-up template.
 - Owner: Adam
 - Environment: WSL2 (Fedora), pi with Claude via GitHub Copilot
 - Tone: direct, no fluff, technically precise
-- Do not import Station AI concepts under any circumstances.
+- Run `skills/audit/SKILL.md` at the start of any session where files have been touched
+  since the last audit
