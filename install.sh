@@ -4,7 +4,7 @@
 # Safe to re-run: existing files and symlinks are updated, not duplicated.
 set -euo pipefail
 
-REPO_URL="${REPERTOIRE_REPO:-https://github.com/burnish-projects/repertoire}"
+REPO_URL="${REPERTOIRE_REPO:-https://github.com/burnish-studio/repertoire}"
 AGENT_DIR="${AGENT_DIR:-$HOME/.agent}"
 REPO_DIR="$AGENT_DIR/repos/repertoire"
 BIN_DIR="$HOME/bin"

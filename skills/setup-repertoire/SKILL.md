@@ -120,7 +120,7 @@ with no re-linking.
 
 ```bash
 mkdir -p ~/.agent/{base,prompts,skills,repos}
-git clone https://github.com/burnish-projects/repertoire ~/.agent/repos/repertoire
+git clone https://github.com/burnish-studio/repertoire ~/.agent/repos/repertoire
 ln -sfn ~/.agent/repos/repertoire/base/bootstrap.md ~/.agent/base/bootstrap.md
 ln -sfn ~/.agent/repos/repertoire/skills ~/.agent/skills/repertoire
 ```

@@ -64,7 +64,7 @@ pattern.
 For either path, the fastest start is:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/burnish-projects/repertoire/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/burnish-studio/repertoire/main/install.sh | bash
 ```
 
 Or invoke the setup skill from inside any agent session:

@@ -328,7 +328,7 @@ URL fetch). Then paste this into a bare pi session on the Fedora laptop:
 
 ```
 Set up repertoire on this machine:
-https://raw.githubusercontent.com/burnish-projects/repertoire/main/skills/setup-repertoire/SKILL.md
+https://raw.githubusercontent.com/burnish-studio/repertoire/main/skills/setup-repertoire/SKILL.md
 ```
 
 Confirm:
