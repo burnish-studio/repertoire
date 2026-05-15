@@ -1,41 +1,44 @@
----
-type: context
-title: Repertoire
-created: 2026-05-13
-updated: 2026-05-14
-status: current
-model: sonnet-4-6
----
-
 # Repertoire
 
-_Perspective: [standards/perspective/STANDARD.md](standards/perspective/STANDARD.md)_
-
-A collection of general-purpose agent skills, standards, and templates. A standalone
-base layer for intelligent agent work — no dependencies, no framework assumptions.
-Other projects build on it; it builds on nothing.
+A collection of skills, standards, and templates for intelligent agent work. A
+standalone base layer — no dependencies, no framework assumptions. Other projects
+build on it; it builds on nothing.
 
 ---
 
 ## What is in here
 
-Three artifact types:
-
 **Skills** are briefings for agents. Each describes a repeatable action with a
-concrete outcome, written as intent and context rather than step-by-step procedure.
-An agent reads a skill and knows what to do and why.
+concrete outcome, written as intent rather than procedure. An agent reads a skill and
+knows what to do and why — without being told how step by step.
 
-**Standards** declare what ought to be — normative positions, conventions, and
-constraints that govern how things are done. A standard does not do anything; it
-governs.
+**Standards** declare what ought to be. Normative positions and conventions that
+govern how things are done. A standard does not act; it governs.
 
-**Templates** show correct form for a type of document. Copyable starting points.
+**Templates** show correct form for a document type. Copyable starting points.
 
-The test for where something belongs:
+The design principle running through all of it: when intelligence is in the execution
+layer, specify intent and outcome — not procedure. Over-specifying is the same error
+as micromanaging a capable person. Skills describe what done looks like and trust the
+agent to reach it.
 
-- Does this describe a repeatable action with an output? → skill
-- Does this govern how things should be done generally? → standard
-- Does this show correct form for something? → template
+---
+
+## Install
+
+Open any agent session with file system and shell access and paste:
+
+```
+Set up repertoire on this machine:
+https://raw.githubusercontent.com/burnish-studio/repertoire/main/skills/setup-repertoire/SKILL.md
+```
+
+The agent fetches the skill, checks capabilities, assesses the environment, and walks
+through setup interactively. Works with pi, Claude Code, Cursor, and any agent that
+can read files and run shell commands. Web-only agents cannot complete this
+installation — the skill will say so immediately.
+
+**Requirements:** git, an agent with file system access and shell execution.
 
 ---
 
@@ -45,46 +48,20 @@ The test for where something belongs:
 skills/       ← agent briefings; one directory per skill, each with SKILL.md
 standards/    ← normative positions; one directory per standard, each with STANDARD.md
 templates/    ← copyable forms; one directory per template, each with TEMPLATE.md
-_work/        ← research notes and working documents; not deployed
+_work/        ← research notes and session documents
 ```
-
----
-
-## Two ways to use this
-
-**Skills only (minimal).** Add `skills/` to your existing harness configuration.
-Nothing else changes. For pi: one line in `~/.pi/settings.json`. For Claude Code:
-symlink into `~/.claude/skills/`. No new conventions, no new tooling.
-
-**Skills and delivery system (full).** Use the `~/.agent/` convention and the `pid`
-launcher. A harness-agnostic home for all agent infrastructure — prompts, skills,
-and managed repos. Works with pi today; adapters for other harnesses follow the same
-pattern.
-
-For either path, the fastest start is:
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/burnish-studio/repertoire/main/install.sh | bash
-```
-
-Or invoke the setup skill from inside any agent session:
-
-> Read `skills/setup-repertoire/SKILL.md` from the cloned repo and follow it.
-
-See [`skills/setup-repertoire/SKILL.md`](skills/setup-repertoire/SKILL.md) for the
-full install guide covering both paths, manual steps, and verification.
 
 ---
 
 ## Self-applying
 
-This repertoire applies its own standards. Every file in the repo must conform to the
-standards the repo asserts. To check conformance, use `skills/audit/SKILL.md`.
+This repertoire applies its own standards. Every file in the repo conforms to the
+standards it asserts. To check conformance: `skills/audit/SKILL.md`.
 
 ---
 
 ## Contributing
 
-Read `standards/programming-paradigm/STANDARD.md` first. Then read
-`skills/write-a-skill/SKILL.md` before adding or modifying any skill. The
-contributing principle: specify intent, not procedure.
+Read `standards/programming-paradigm/STANDARD.md` before adding anything. Then
+`skills/write-a-skill/SKILL.md` before writing a skill. The short version: describe
+what done looks like, not how to get there.
