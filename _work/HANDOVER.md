@@ -2,7 +2,7 @@
 type: context
 title: Repertoire — Handover
 created: 2026-05-13
-updated: 2026-05-14 (session 2)
+updated: 2026-05-15 (session 3)
 status: current
 model: sonnet-4-6
 ---
@@ -199,6 +199,41 @@ Audit run. 7 findings fixed, all mechanical:
 
 Repo is in a clean, self-consistent state.
 
+## What was done this session (2026-05-15, bootstrap design)
+
+Research and design only — no files modified beyond this handover and research doc.
+
+**Settled: paradigm 2 bootstrap design.**
+
+- **Single-instruction install.** Entire setup initiated by pasting one line into any
+  capable agent session: a natural language instruction + raw URL pointing to
+  `setup-repertoire/SKILL.md`. Agent fetches the skill, assesses the environment,
+  walks through setup interactively.
+
+- **Agent writes the adapter.** The combinatorial problem (harnesses × OS × config
+  variants) is unsolvable with pre-packaged scripts. The agent knows its own harness
+  and environment. `setup-repertoire` specifies the end state; the agent handles
+  procedure. `pid` is the reference implementation for pi/Unix, not the general case.
+
+- **Requirements check first.** `setup-repertoire` must fail fast and clearly if the
+  agent lacks file system access or shell execution. No partial setup, no silent
+  failure. One clear message directing the user to a capable agent.
+
+- **Interactive walkthrough.** Setup is a conversation, not silent automation. Each
+  decision point surfaces a recommendation and asks for confirmation. User understands
+  what happened when it's done.
+
+- **pid's role clarified.** Optional convenience launcher for pi/Unix users. Not
+  required infrastructure. Not offered to users on other harnesses.
+
+- **`setup-repertoire` must be rewritten.** Current version is a human manual (old
+  paradigm). Needs to become a paradigm 2 skill: end state + agent judgment, not
+  procedure enumeration.
+
+Full session research doc: `_work/2026-05-15_research-doc_bootstrap-design-01--sonnet-4-6.md`
+
+---
+
 ## What was done this session (2026-05-14, delivery research)
 
 No files were modified. Research only.
@@ -270,21 +305,39 @@ Full session research doc: `_work/2026-05-14_research-doc_delivery-mechanics-pid
 
 ## Build queue — in dependency order
 
-### 1. Fedora laptop test ← NEXT ACTION
+### 1. Rewrite setup-repertoire ← NEXT ACTION
 
-Fresh Fedora machine with only pi installed. Test the full install path:
+The current skill is a human manual (old paradigm). Rewrite as a paradigm 2 skill.
+Required behaviour:
 
-```bash
-curl -fsSL https://raw.githubusercontent.com/burnish-projects/repertoire/main/install.sh | bash
+- Capabilities check first — fail fast with clear message if no file access / shell execution
+- Self-contained — handles clone itself; assumes nothing pre-installed beyond git
+- Environment assessment — harness, OS, shell, config locations before any action
+- Present plan → get confirmation → execute → verify
+- Interactive: decision points with recommendations, user can accept or adjust
+- Harness-specific wiring via agent knowledge; consult agent-core.sh + pid as reference
+- Graceful degradation to guided-manual mode if no shell access
+- pid offered as optional for pi/Unix users only
+
+Full spec in: `_work/2026-05-15_research-doc_bootstrap-design-01--sonnet-4-6.md`
+
+### 2. Fedora laptop test
+
+After setup-repertoire is rewritten. Make repo public first (private repo blocks raw
+URL fetch). Then paste this into a bare pi session on the Fedora laptop:
+
+```
+Set up repertoire on this machine:
+https://raw.githubusercontent.com/burnish-projects/repertoire/main/skills/setup-repertoire/SKILL.md
 ```
 
-Or via agent: open a bare pi session and paste the curl command. Confirm:
+Confirm:
 
-- `pid --doctor` shows correct manifest
-- Skills from repertoire appear in a session
-- Bootstrap is active (skills auto-trigger without prompting)
-
-This is the real-world validation of everything built in session 2.
+- Agent does capabilities check, proceeds
+- Agent presents plan, gets confirmation
+- Agent walks through setup interactively
+- Bootstrap loads in new session
+- Skills are visible and auto-trigger
 
 ### 2. Skills backlog
 
