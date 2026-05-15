@@ -2,7 +2,7 @@
 type: context
 title: Repertoire — Handover
 created: 2026-05-13
-updated: 2026-05-13
+updated: 2026-05-14 (session 2)
 status: current
 model: sonnet-4-6
 ---
@@ -111,7 +111,7 @@ Every standard has two parts:
 | `perspective/`          | I/me = user, you/your = agent.                                              |
 | `programming-paradigm/` | Intent not procedure; over-specification (micromanagement) as failure mode. |
 | `self-consistency/`     | The repertoire must conform to its own standards at all times.              |
-| `self-contained-files/` | Every file must be intelligible cold.                                       |
+| `self-contained-files/` | Every file must be intelligible cold and autonomous.                        |
 | `unknown-values/`       | Sentinel values: `unknown` / `n/a`.                                         |
 
 ### Templates
@@ -122,15 +122,27 @@ Every standard has two parts:
 
 ### Skills
 
-| Directory           | Purpose                                                  |
-| ------------------- | -------------------------------------------------------- |
-| `write-a-skill/`    | How to write a skill. Updated this session — current.    |
-| `write-a-standard/` | How to write a standard.                                 |
-| `audit/`            | Two-phase conformance check — diagnose then fix.         |
-| `codify/`           | Place a discussed concept correctly into the repertoire. |
+| Directory           | Purpose                                                      |
+| ------------------- | ------------------------------------------------------------ |
+| `write-a-skill/`    | How to write a skill. Benchmarked and updated — current.     |
+| `write-a-standard/` | How to write a standard.                                     |
+| `audit/`            | Two-phase conformance check — diagnose then fix.             |
+| `codify/`           | Place a discussed concept correctly into the repertoire.     |
+| `setup-repertoire/` | Install guide for repertoire; covers minimal and full paths. |
 
-`write-a-skill/` now has a `references/discipline-enforcing.md` file covering
-rationalization tables, red flags lists, and persuasion mechanisms for that skill type.
+`write-a-skill/` has a `references/discipline-enforcing.md` file covering
+rationalisation tables, red flags lists, and persuasion mechanisms for that skill type.
+
+### Delivery infrastructure (not skills/standards/templates — lives in bin/, base/, docs/)
+
+| File / Directory    | Purpose                                                                                   |
+| ------------------- | ----------------------------------------------------------------------------------------- |
+| `base/bootstrap.md` | General-purpose skills proactivity instruction. Symlinked to `~/.agent/base/` on install. |
+| `bin/agent-core.sh` | Harness-agnostic core library. Sources into any harness adapter.                          |
+| `bin/pid`           | Pi adapter. Sources agent-core.sh; ~45 lines of pi-specific logic.                        |
+| `install.sh`        | One-command install. Creates `~/.agent/`, clones repo, symlinks.                          |
+| `docs/agent-dir.md` | The `~/.agent/` convention as a full spec.                                                |
+| `docs/pid-setup.md` | Pid flags reference and adapter-writing guide.                                            |
 
 ### Research output
 
@@ -187,14 +199,97 @@ Audit run. 7 findings fixed, all mechanical:
 
 Repo is in a clean, self-consistent state.
 
+## What was done this session (2026-05-14, delivery research)
+
+No files were modified. Research only.
+
+**Researched delivery and loading mechanisms** for Matt Pocock’s skills repo and Superpowers (obra). Key findings:
+
+- **Matt Pocock — pull model.** Skills installed via `npx skills@latest add`, symlinked into `~/.claude/skills/` by `scripts/link-skills.sh`. Plugin manifest at `.claude-plugin/plugin.json`. Skills triggered by user slash commands (`/grill-me` etc.). User-initiated; agent doesn’t use them unless asked.
+
+- **Superpowers — push model.** Multi-harness plugin manifests (`.claude-plugin/`, `.codex-plugin/`, `.cursor-plugin/`). A `SessionStart` hook fires on session open, reads `skills/using-superpowers/SKILL.md`, and injects its full content as `additionalContext`. That bootstrap skill instructs the agent to check for and auto-trigger relevant skills before any response. Skills are the default behaviour, not tools you reach for.
+
+- **Key distinction for repertoire:** Pi already solves skill discovery via `available_skills` in the system prompt. What repertoire lacks is a bootstrap equivalent to `using-superpowers` — a meta-skill that tells the agent when and how aggressively to auto-trigger the others.
+
+- Both repos cloned at `/tmp/` — will not persist; re-fetch as needed.
+
+## What was done this session (2026-05-14, session 2 — delivery infrastructure build)
+
+1. **`~/.agent/` as harness-agnostic root.** Content belongs to the user, not to any harness.
+
+2. **Structure:**
+
+   ```
+   ~/.agent/
+     base/       ← always loaded, protected — no local signal can suppress
+     prompts/    ← global prompts; subdirectories are inert library space
+     skills/     ← skills; use symlinks to point at skill repos
+     repos/      ← managed git clones (install.sh / --update)
+   ```
+
+3. **Local repo overrides** via `.agent/` in the project directory:
+   - `prompts/_append/` — add to global prompts
+   - `prompts/_replace/` — ignore globals, use only these (absolute; base immune)
+   - `skills/` — always additive
+   - Pid warns if both `_replace/` and `_append/` are present
+
+4. **`bin/agent-core.sh`** — harness-agnostic core library. All collection, model
+   injection, manifest print, doctor/verify, update logic lives here. Adapters source
+   this file; they do not reimplement it.
+
+5. **`bin/pid`** — thin pi adapter (~45 lines). Sources agent-core.sh. Pi-specific
+   only: reads model from `~/.pi/settings.json`, translates `APPENDS[]` and
+   `SKILL_PATHS[]` to pi flags (`--no-context-files`, `--append-system-prompt`,
+   `--skill`), execs pi. Writing an adapter for another harness: follow same pattern.
+
+6. **`~/bin/pid`** now symlinks to `repertoire/bin/pid` — updates via `git pull`.
+
+7. **`install.sh`** — one-command install. Creates `~/.agent/` structure, clones
+   to `~/.agent/repos/repertoire/`, symlinks bootstrap/skills/pid, verifies.
+
+8. **`skills/setup-repertoire/SKILL.md`** — the install document. Covers minimal
+   path (skills only, no convention buy-in) and full path (agent-dir + pid). Written
+   for human or agent — same document, both audiences.
+
+9. **`base/bootstrap.md`** — general-purpose skills proactivity instruction now
+   lives in the repo; symlinked to `~/.agent/base/` by install.sh.
+
+10. **`docs/agent-dir.md`** — the `~/.agent/` convention as a full spec.
+
+11. **`docs/pid-setup.md`** — rewritten as pid flags reference and adapter guide.
+
+12. **Pi settings** — skills array removed. Pid is sole controller.
+
+13. **Philosophical point settled:** INSTALL.md and a setup skill are the same thing.
+    Instructions for an intelligent reader work for human or agent. One document,
+    two access paths. Optimise for clarity, not for which reader type.
+
+Full session research doc: `_work/2026-05-14_research-doc_delivery-mechanics-pid-01--sonnet-4-6.md`
+
 ---
 
 ## Build queue — in dependency order
 
-### 1. Skills backlog ← START HERE
+### 1. Fedora laptop test ← NEXT ACTION
+
+Fresh Fedora machine with only pi installed. Test the full install path:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/burnish-projects/repertoire/main/install.sh | bash
+```
+
+Or via agent: open a bare pi session and paste the curl command. Confirm:
+
+- `pid --doctor` shows correct manifest
+- Skills from repertoire appear in a session
+- Bootstrap is active (skills auto-trigger without prompting)
+
+This is the real-world validation of everything built in session 2.
+
+### 2. Skills backlog
 
 `write-a-skill` is done. Read all four benchmarks before building any of these.
-Matt Pocock's deprecated `ubiquitous-language` is the best external benchmark for that
+Matt Pocock’s deprecated `ubiquitous-language` is the best external benchmark for that
 skill specifically.
 
 - `grill-me` — keep it simple; risk is over-engineering
@@ -204,13 +299,22 @@ skill specifically.
 - `grill-you` — user interrogates the agent about its own nature or tendencies
 - `introspect` — agent conducts structured self-reflection on a topic
 
-### 2. Bibliography convention
+### 3. Audit
+
+Session 2 added new files (`base/bootstrap.md`, `bin/`, `docs/`, `skills/setup-repertoire/`,
+`install.sh`). These must conform to repertoire’s standards. Run audit before or
+during the next session that touches skills/standards/templates.
+
+Note: `bin/` shell scripts and `install.sh` are outside the standard document audit
+scope but should be reviewed for correctness.
+
+### 4. Bibliography convention
 
 Formalise where references to external sources live (distinct from reference files
 the agent loads). Options: `REFERENCES.md` in skill/standard directory, or a
 `sources` extended frontmatter field. Decide and add to a standard.
 
-### 3. Open-shop / close-shop with the plate
+### 5. Open-shop / close-shop with the plate
 
 Open-shop spins up a session temp folder (`_work/plate-{date}/` or similar). All
 in-session artifacts land there. Close-shop processes the folder — promotes permanent
@@ -234,13 +338,10 @@ whatever mechanism is implemented above.
 ## Practical notes
 
 - Owner: Adam
-- Environment: WSL2 (Fedora), pi with Claude via GitHub Copilot
+- Environment: WSL2 (Fedora), pi with Claude via GitHub Copilot. Also: fresh Fedora laptop (only pi installed) available for install testing.
 - Tone: direct, no fluff, technically precise
-- Run `skills/audit/SKILL.md` at the start of any session where files have been touched
-  since the last audit
-- Matt Pocock skills repo is cloned at `/tmp/pi-github-repos/mattpocock/skills` —
-  may not persist across sessions; re-fetch from `https://github.com/mattpocock/skills/`
-  if needed
-- Superpowers repo is cloned at `/tmp/pi-github-repos/obra/superpowers` — may not
-  persist across sessions; re-fetch from `https://github.com/obra/superpowers/` if needed
-- Audit was NOT run at the end of this session — run it before making any changes
+- Run `skills/audit/SKILL.md` at the start of any session where skills/standards/templates have been touched since the last audit
+- Matt Pocock skills repo is cloned at `/tmp/pi-github-repos/mattpocock/skills` — may not persist across sessions; re-fetch from `https://github.com/mattpocock/skills/` if needed
+- Superpowers repo is cloned at `/tmp/pi-github-repos/obra/superpowers` — may not persist across sessions; re-fetch from `https://github.com/obra/superpowers/` if needed
+- `~/.pi/agent/doti/operative/` still exists — old location, safe to delete once confident nothing is missing from it
+- Audit was last run and clean as of the 2026-05-13 audit session. Session 2 added new repo files; audit should be run at start of next session before building more skills.
