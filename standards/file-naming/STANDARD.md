@@ -62,3 +62,21 @@ The double dash before `<model>` is a deliberate visual separator — it sets pr
 apart from subject matter at a glance.
 
 If the model cannot be determined, apply `standards/unknown-values/STANDARD.md`.
+
+---
+
+## Optional type segment
+
+Point-in-time documents may include an optional type segment between the date and topic:
+
+```
+YYYY-MM-DD_<type>_<topic>-<nn>--<model>.md
+```
+
+Use this when the type adds meaningful disambiguation — for example, distinguishing
+research documents from session records within the same `_work/` directory.
+
+Example: `2026-05-15_research-doc_bootstrap-design-01--sonnet-4-6.md`
+
+The type segment is optional and must not be used merely to restate what the topic
+already makes clear.

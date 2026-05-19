@@ -74,7 +74,7 @@ non-compliance as deviance.
 Every fix must be preceded by a failing test that reproduces the bug. Every time.
 ```
 
-Do not use liking (warmth, praise) in discipline-enforcing skills. It produces
+You must not use liking (warmth, praise) in discipline-enforcing skills. It produces
 sycophancy and undermines honest feedback.
 
 ---

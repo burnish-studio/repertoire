@@ -305,41 +305,27 @@ Full session research doc: `_work/2026-05-14_research-doc_delivery-mechanics-pid
 
 ## Build queue — in dependency order
 
-### 1. Rewrite setup-repertoire ← NEXT ACTION
+### 1. Fedora laptop retest ← NEXT ACTION
 
-The current skill is a human manual (old paradigm). Rewrite as a paradigm 2 skill.
-Required behaviour:
+setup-repertoire has been rewritten, four install bugs fixed, and audit is now clean
+(all F1–F6 applied; D1–D4 resolved — see audit section below). Retest by pasting
+into a bare pi session on the Fedora laptop:
 
-- Capabilities check first — fail fast with clear message if no file access / shell execution
-- Self-contained — handles clone itself; assumes nothing pre-installed beyond git
-- Environment assessment — harness, OS, shell, config locations before any action
-- Present plan → get confirmation → execute → verify
-- Interactive: decision points with recommendations, user can accept or adjust
-- Harness-specific wiring via agent knowledge; consult agent-core.sh + pid as reference
-- Graceful degradation to guided-manual mode if no shell access
-- pid offered as optional for pi/Unix users only
+### 2. Fedora laptop retest
 
-Full spec in: `_work/2026-05-15_research-doc_bootstrap-design-01--sonnet-4-6.md`
-
-### 2. Fedora laptop test
-
-After setup-repertoire is rewritten. Make repo public first (private repo blocks raw
-URL fetch). Then paste this into a bare pi session on the Fedora laptop:
+setup-repertoire has been rewritten and four bugs fixed (branch name, find -L,
+PATH guidance, duplicate skills path). Repo is now public. Retest by pasting into a
+bare pi session on the Fedora laptop:
 
 ```
 Set up repertoire on this machine:
-https://raw.githubusercontent.com/burnish-studio/repertoire/main/skills/setup-repertoire/SKILL.md
+https://raw.githubusercontent.com/burnish-studio/repertoire/master/skills/setup-repertoire/SKILL.md
 ```
 
-Confirm:
+Confirm: capabilities check passes, plan presented, interactive walkthrough, bootstrap
+loads in new session, skills visible and auto-trigger.
 
-- Agent does capabilities check, proceeds
-- Agent presents plan, gets confirmation
-- Agent walks through setup interactively
-- Bootstrap loads in new session
-- Skills are visible and auto-trigger
-
-### 2. Skills backlog
+### 3. Skills backlog
 
 `write-a-skill` is done. Read all four benchmarks before building any of these.
 Matt Pocock’s deprecated `ubiquitous-language` is the best external benchmark for that
@@ -352,22 +338,50 @@ skill specifically.
 - `grill-you` — user interrogates the agent about its own nature or tendencies
 - `introspect` — agent conducts structured self-reflection on a topic
 
-### 3. Audit
+### 4. Audit — clean as of 2026-05-19
 
-Session 2 added new files (`base/bootstrap.md`, `bin/`, `docs/`, `skills/setup-repertoire/`,
-`install.sh`). These must conform to repertoire’s standards. Run audit before or
-during the next session that touches skills/standards/templates.
+All F1–F6 applied. D1–D4 resolved:
 
-Note: `bin/` shell scripts and `install.sh` are outside the standard document audit
-scope but should be reviewed for correctness.
+- **D1** `README.md` exempted from frontmatter standard — YAML renders badly on GitHub.
+  Exemption added to `standards/document-metadata/STANDARD.md`.
+- **D2** `base/` files exempted from frontmatter standard — runtime-injection category;
+  frontmatter would pollute the system prompt. Same standard updated.
+- **D3** `research-doc` added as an allowed `type` value in
+  `templates/frontmatter/TEMPLATE.md`.
+- **D4** Optional type segment codified in `standards/file-naming/STANDARD.md`.
+  Pattern `YYYY-MM-DD_<type>_<topic>-<nn>--<model>.md` is now valid.
 
-### 4. Bibliography convention
+F6 file renamed to `2026-05-15_research-doc_install-test-report-01--unknown.md`.
+`bin/PID.md` added (pid launcher documentation, colocated with script). Frontmatter
+applied to `docs/agent-dir.md`, `docs/pid-setup.md`, and `bin/PID.md`.
+
+Next audit: run after the skills backlog items are built.
+
+### 5. Uninstall — install manifest and teardown skill
+
+During the first real install test (Fedora, 2026-05-15), manually reversing the
+installation was needed and the process was opaque. Two things are needed:
+
+**Install manifest** — during setup, the agent should write a log of every change
+made to the system: directories created, symlinks added, PATH modifications, files
+written. Location: `~/.agent/install-manifest.md` (or similar). Format: a simple
+list of reversible actions with enough detail to undo each one.
+
+**Uninstall skill / command** — a `teardown-repertoire` skill (or equivalent
+one-line agent instruction) that reads the manifest and walks back every change,
+confirming with the user at each step. Same interactive pattern as install: present
+what will be removed, confirm, execute, verify.
+
+This is a natural extension of the paradigm 2 install approach. The manifest is the
+agent's own record of what it did; the uninstall uses it rather than guessing.
+
+### 6. Bibliography convention
 
 Formalise where references to external sources live (distinct from reference files
 the agent loads). Options: `REFERENCES.md` in skill/standard directory, or a
 `sources` extended frontmatter field. Decide and add to a standard.
 
-### 5. Open-shop / close-shop with the plate
+### 7. Open-shop / close-shop with the plate
 
 Open-shop spins up a session temp folder (`_work/plate-{date}/` or similar). All
 in-session artifacts land there. Close-shop processes the folder — promotes permanent
@@ -397,4 +411,4 @@ whatever mechanism is implemented above.
 - Matt Pocock skills repo is cloned at `/tmp/pi-github-repos/mattpocock/skills` — may not persist across sessions; re-fetch from `https://github.com/mattpocock/skills/` if needed
 - Superpowers repo is cloned at `/tmp/pi-github-repos/obra/superpowers` — may not persist across sessions; re-fetch from `https://github.com/obra/superpowers/` if needed
 - `~/.pi/agent/doti/operative/` still exists — old location, safe to delete once confident nothing is missing from it
-- Audit was last run and clean as of the 2026-05-13 audit session. Session 2 added new repo files; audit should be run at start of next session before building more skills.
+- Audit clean as of 2026-05-19. All F1–F6 applied, D1–D4 resolved. See build queue item 4.

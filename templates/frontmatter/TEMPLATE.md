@@ -28,14 +28,14 @@ model:
 
 Required for all documents.
 
-| Field     | Meaning                                                        | Allowed values                                |
-| --------- | -------------------------------------------------------------- | --------------------------------------------- |
-| `type`    | The kind of artefact this document is                          | `skill` · `standard` · `template` · `context` |
-| `title`   | Human-readable name for the document                           | Free text                                     |
-| `created` | Date first created. Set once — never updated.                  | ISO date `YYYY-MM-DD`                         |
-| `updated` | Date of most recent edit. Must be refreshed on every edit.     | ISO date `YYYY-MM-DD`                         |
-| `status`  | Current standing of this document                              | `draft` · `current` · `deprecated`            |
-| `model`   | Model that produced or last significantly edited this document | Short identifier, e.g. `sonnet-4-6`           |
+| Field     | Meaning                                                        | Allowed values                                                 |
+| --------- | -------------------------------------------------------------- | -------------------------------------------------------------- |
+| `type`    | The kind of artefact this document is                          | `skill` · `standard` · `template` · `context` · `research-doc` |
+| `title`   | Human-readable name for the document                           | Free text                                                      |
+| `created` | Date first created. Set once — never updated.                  | ISO date `YYYY-MM-DD`                                          |
+| `updated` | Date of most recent edit. Must be refreshed on every edit.     | ISO date `YYYY-MM-DD`                                          |
+| `status`  | Current standing of this document                              | `draft` · `current` · `deprecated`                             |
+| `model`   | Model that produced or last significantly edited this document | Short identifier, e.g. `sonnet-4-6`                            |
 
 ---
 

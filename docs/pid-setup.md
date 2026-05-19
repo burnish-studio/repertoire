@@ -1,3 +1,12 @@
+---
+type: context
+title: pid — Reference
+created: 2026-05-14
+updated: 2026-05-14
+status: current
+model: sonnet-4-6
+---
+
 # pid — Reference
 
 `pid` is the pi adapter for the `~/.agent/` convention. It sources `bin/agent-core.sh`

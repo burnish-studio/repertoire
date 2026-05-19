@@ -76,7 +76,7 @@ agent session:
 
 ```
 Set up repertoire on this machine:
-https://raw.githubusercontent.com/burnish-studio/repertoire/main/skills/setup-repertoire/SKILL.md
+https://raw.githubusercontent.com/burnish-studio/repertoire/master/skills/setup-repertoire/SKILL.md
 ```
 
 What happens:

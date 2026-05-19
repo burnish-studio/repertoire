@@ -35,7 +35,7 @@ If any of these fail, stop immediately and tell the user:
 > full tool access (pi, Claude Code, Cursor with terminal, or equivalent). A
 > web-only agent cannot complete this installation."
 
-Do not proceed past this point. Do not attempt partial setup.
+You must not proceed past this point. You must not attempt partial setup.
 
 ---
 
@@ -80,7 +80,7 @@ Present a plan before doing anything. Do not execute silently.
 - The default repo location: `~/.agent/repos/repertoire/`
 - Ask: "Shall I proceed, or would you like to change anything?"
 
-Wait for confirmation before acting.
+You must wait for confirmation before acting.
 
 **During execution, narrate each step:**
 
@@ -94,13 +94,13 @@ Wait for confirmation before acting.
 
 **Decision points — surface these, give a recommendation, wait for answer:**
 
-| Decision               | Default recommendation                                           |
-| ---------------------- | ---------------------------------------------------------------- |
-| Repo location          | `~/.agent/repos/repertoire/` — keeps it with other managed repos |
-| `~/bin` not on PATH    | Add `export PATH="$HOME/bin:$PATH"` to `.bashrc` — do it now     |
-| Install `pid` launcher | Yes, for pi users on Unix — see below                            |
+| Decision               | Default recommendation                                                                                                                                  |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Repo location          | `~/.agent/repos/repertoire/` — keeps it with other managed repos                                                                                        |
+| `~/bin` not on PATH    | Add it now using your shell's method: bash/zsh: `export PATH="$HOME/bin:$PATH"` in `.bashrc`/`.zshrc`; fish: `fish_add_path $HOME/bin` in `config.fish` |
+| Install `pid` launcher | Yes, for pi users on Unix — see below                                                                                                                   |
 
-Do not ask about things that have no sensible alternative. Surface only real choices.
+You must not ask about things that have no sensible alternative. Surface only real choices.
 
 ---
 
@@ -167,7 +167,7 @@ session. Run `pid --doctor` to see exactly what loads."
 
 ## Verification
 
-Do not declare setup complete until you have verified the end state. Two steps:
+You must not declare setup complete until you have verified the end state. Two steps:
 
 **1. Manifest check** — run `pid --doctor` (pi users) or the harness equivalent.
 Confirm bootstrap and skills path both appear. If either is missing, diagnose and
@@ -177,8 +177,8 @@ fix before continuing.
 repertoire should be listed as available. Try asking the agent to do something
 where a skill applies — it should announce which skill it is using."
 
-Wait for the user to confirm this works. If it does not, diagnose before finishing.
-Do not hand off a broken setup.
+You must wait for the user to confirm this works. If it does not, diagnose before finishing.
+You must not hand off a broken setup.
 
 ---
 
@@ -190,4 +190,4 @@ Summarise what was done in three to five lines. Tell the user:
 - How to update: `pid --update` (pi) or `cd ~/.agent/repos/repertoire && git pull`
 - What to expect in the next session
 
-Do not pad. If everything went smoothly, say so and stop.
+You must not pad. If everything went smoothly, say so and stop.

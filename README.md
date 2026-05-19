@@ -30,7 +30,7 @@ Open any agent session with file system and shell access and paste:
 
 ```
 Set up repertoire on this machine:
-https://raw.githubusercontent.com/burnish-studio/repertoire/main/skills/setup-repertoire/SKILL.md
+https://raw.githubusercontent.com/burnish-studio/repertoire/master/skills/setup-repertoire/SKILL.md
 ```
 
 The agent fetches the skill, checks capabilities, assesses the environment, and walks

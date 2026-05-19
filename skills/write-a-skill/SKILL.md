@@ -36,7 +36,7 @@ Create a skill when:
 - The failure mode is non-obvious without domain knowledge
 - The pattern applies across sessions and contexts
 
-Do not create a skill for:
+You must not create a skill for:
 
 - One-off solutions or project-specific conventions (those belong in CLAUDE.md / AGENTS.md)
 - Standard practices already in the agent's general knowledge
@@ -198,7 +198,7 @@ Not general cautions. Specific traps with specific consequences.
 ### Output format
 
 When the skill produces a specific artefact with a defined shape, specify the shape.
-Do not leave the agent to infer what done looks like from first principles.
+You must not leave the agent to infer what done looks like from first principles.
 
 If the output is open-ended, describe its properties instead (what makes it correct,
 what makes it wrong). Both cases require an exit criterion the agent can verify.

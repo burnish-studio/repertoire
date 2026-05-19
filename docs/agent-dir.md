@@ -1,3 +1,12 @@
+---
+type: context
+title: The ~/.agent/ Convention
+created: 2026-05-14
+updated: 2026-05-14
+status: current
+model: sonnet-4-6
+---
+
 # The ~/.agent/ Convention
 
 This document specifies the `~/.agent/` directory convention. It is the contract that

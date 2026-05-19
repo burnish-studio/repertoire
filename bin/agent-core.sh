@@ -101,13 +101,18 @@ _collect_dir() {
 	if [[ -d "$dir" ]]; then
 		while IFS= read -r -d '' f; do
 			APPENDS+=("$f")
-		done < <(find "$dir" -maxdepth 1 -type f -name '*.md' -print0 | sort -z)
+		done < <(find -L "$dir" -maxdepth 1 -type f -name '*.md' -print0 | sort -z)
 	fi
 }
 
 _add_skills() {
 	local dir="$1"
 	if [[ -d "$dir" ]]; then
+		local resolved
+		resolved=$(realpath "$dir" 2>/dev/null || echo "$dir")
+		for existing in "${SKILL_PATHS[@]:-}"; do
+			[[ "$(realpath "$existing" 2>/dev/null || echo "$existing")" == "$resolved" ]] && return 0
+		done
 		SKILL_PATHS+=("$dir")
 	fi
 }
