@@ -90,7 +90,10 @@ You must wait for confirmation before acting.
 → Symlinking bootstrap.md into ~/.agent/base/... done
 → Symlinking skills/ into ~/.agent/skills/repertoire/... done
 → Wiring harness to load bootstrap and skills...
+→ Writing install manifest to ~/.agent/install-manifest.md... done
 ```
+
+Record each change in the manifest as you make it — see "Record the install" below.
 
 **Decision points — surface these, give a recommendation, wait for answer:**
 
@@ -165,6 +168,52 @@ session. Run `pid --doctor` to see exactly what loads."
 
 ---
 
+## Record the install — the manifest
+
+As you make each change, record it in an install manifest at
+`~/.agent/install-manifest.md`. This is the agent's own log of what it did, and it is
+what `teardown-repertoire` reads to reverse the installation cleanly. Write it as you
+go, not from memory afterwards.
+
+**Record only what you actually did.** If `~/.agent/` already existed, setup did not
+create it — do not list it. Teardown removes exactly what the manifest records and
+nothing else, so a pre-existing directory must never appear here. This is the one rule
+that keeps uninstall safe.
+
+Group entries by kind so each is reversible on its own:
+
+```markdown
+# Repertoire — Install Manifest
+
+Written by setup on <date>. Records every change setup made to this system.
+`teardown-repertoire` reverses these; anything not listed here was pre-existing and
+must not be touched.
+
+## Directories created
+- ~/.agent/ (with base/ prompts/ skills/ repos/) — created because absent
+- ~/bin/ — created because absent
+
+## Repository cloned
+- ~/.agent/repos/repertoire/ ← git clone of https://github.com/burnish-studio/repertoire
+
+## Symlinks created
+- ~/.agent/base/bootstrap.md → ~/.agent/repos/repertoire/base/bootstrap.md
+- ~/.agent/skills/repertoire → ~/.agent/repos/repertoire/skills
+- ~/bin/pid → ~/.agent/repos/repertoire/bin/pid (pi/Unix only)
+
+## PATH / shell config
+- Appended `export PATH="$HOME/bin:$PATH"` to ~/.bashrc
+
+## Harness wiring
+- <harness-specific: e.g. registered skills path in ~/.claude/settings.json>
+```
+
+Omit any section with nothing to record (e.g. no manifest entry for `~/bin` if it was
+already present and on PATH). Keep each entry concrete enough that a reversal needs no
+guessing: exact paths, exact lines added, exact files edited.
+
+---
+
 ## Verification
 
 You must not declare setup complete until you have verified the end state. Two steps:
@@ -188,6 +237,8 @@ Summarise what was done in three to five lines. Tell the user:
 
 - Where the repo lives
 - How to update: `pid --update` (pi) or `cd ~/.agent/repos/repertoire && git pull`
+- How to uninstall: ask any capable agent to run `teardown-repertoire`, which reads
+  the manifest and reverses every change interactively
 - What to expect in the next session
 
 You must not pad. If everything went smoothly, say so and stop.

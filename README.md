@@ -40,6 +40,26 @@ installation — the skill will say so immediately.
 
 **Requirements:** git, an agent with file system access and shell execution.
 
+### Manual install (no agent)
+
+If you would rather run it yourself, clone the repo and run the installer. It creates
+the `~/.agent/` structure, clones into it, symlinks bootstrap/skills/pid, and writes
+an install manifest:
+
+```
+git clone https://github.com/burnish-studio/repertoire ~/.agent/repos/repertoire
+bash ~/.agent/repos/repertoire/install.sh
+```
+
+The installer is idempotent — safe to re-run to update. Harness wiring beyond pid is
+harness-specific; the agent-driven path above handles it for you.
+
+### Uninstall
+
+Ask any capable agent to run the `teardown-repertoire` skill. It reads
+`~/.agent/install-manifest.md` and reverses every recorded change interactively,
+removing only what the install created.
+
 ---
 
 ## Structure

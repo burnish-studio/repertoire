@@ -30,6 +30,12 @@ command -v git >/dev/null 2>&1 || fail "git not found — install git and retry"
 command -v bash >/dev/null 2>&1 || fail "bash not found"
 
 # ── directories ───────────────────────────────────────────────────────────────
+# Record pre-existence before creating anything, so the manifest lists only what
+# this run created — teardown must never remove a directory that was already here.
+AGENT_DIR_EXISTED=$([[ -d "$AGENT_DIR" ]] && echo yes || echo no)
+BIN_DIR_EXISTED=$([[ -d "$BIN_DIR" ]] && echo yes || echo no)
+REPO_EXISTED=$([[ -d "$REPO_DIR/.git" ]] && echo yes || echo no)
+
 step "creating ~/.agent/ structure"
 mkdir -p "$AGENT_DIR/base"
 mkdir -p "$AGENT_DIR/prompts"
@@ -58,6 +64,39 @@ ln -sfn "$REPO_DIR/bin/pid" "$BIN_DIR/pid"
 chmod +x "$REPO_DIR/bin/pid"
 
 ok "symlinks created"
+
+# ── install manifest ──────────────────────────────────────────────────────────
+# Record what this run changed, so teardown-repertoire can reverse it cleanly.
+step "writing install manifest"
+MANIFEST="$AGENT_DIR/install-manifest.md"
+{
+	echo "# Repertoire — Install Manifest"
+	echo ""
+	echo "Written by install.sh on $(date -u +%Y-%m-%dT%H:%M:%SZ). Records every change"
+	echo "this run made. \`teardown-repertoire\` reverses these; anything not listed here"
+	echo "was pre-existing and must not be touched."
+	echo ""
+	echo "## Directories created"
+	[[ "$AGENT_DIR_EXISTED" == no ]] && echo "- $AGENT_DIR/ (with base/ prompts/ skills/ repos/) — created because absent"
+	[[ "$BIN_DIR_EXISTED" == no ]] && echo "- $BIN_DIR/ — created because absent"
+	[[ "$AGENT_DIR_EXISTED" == yes && "$BIN_DIR_EXISTED" == yes ]] && echo "- (none — both ~/.agent/ and ~/bin/ already existed)"
+	echo ""
+	echo "## Repository cloned"
+	if [[ "$REPO_EXISTED" == yes ]]; then
+		echo "- $REPO_DIR/ — already present, updated not created; leave in place on teardown"
+	else
+		echo "- $REPO_DIR/ ← git clone of $REPO_URL"
+	fi
+	echo ""
+	echo "## Symlinks created"
+	echo "- $AGENT_DIR/base/bootstrap.md → $REPO_DIR/base/bootstrap.md"
+	echo "- $AGENT_DIR/skills/repertoire → $REPO_DIR/skills"
+	echo "- $BIN_DIR/pid → $REPO_DIR/bin/pid"
+	echo ""
+	echo "## PATH / shell config"
+	echo "- (none — install.sh only warns; PATH was not edited by this run)"
+} >"$MANIFEST"
+ok "manifest written to $MANIFEST"
 
 # ── PATH check ────────────────────────────────────────────────────────────────
 if ! echo "$PATH" | grep -q "$BIN_DIR"; then

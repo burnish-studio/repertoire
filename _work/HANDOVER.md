@@ -2,9 +2,9 @@
 type: context
 title: Repertoire — Handover
 created: 2026-05-13
-updated: 2026-05-15 (session 3)
+updated: 2026-07-01 (v1 scoping + uninstall)
 status: current
-model: sonnet-4-6
+model: claude-opus-4-8
 ---
 
 # Repertoire — Handover
@@ -303,6 +303,51 @@ Full session research doc: `_work/2026-05-14_research-doc_delivery-mechanics-pid
 
 ---
 
+## What was done this session (2026-07-01, v1 scoping + uninstall)
+
+**Defined "v1 done" and executed the buildable parts.** The prior build queue was a
+sonnet-4-6 draft; the general-purpose skills backlog (grill-me, caveman, etc.) was
+*not* endorsed by Adam and is deliberately dropped from v1.
+
+**v1 "done" definition (locked with Adam):**
+
+1. Install verified — Fedora retest passes (Adam-triggered; the 4 fixes are already in
+   code from the previous commit).
+2. Uninstall exists — install manifest + `teardown-repertoire`. **Done this session.**
+3. Manual copy-paste fallback documented. **Done this session** (README "Manual
+   install" section pointing at `install.sh`).
+4. Skills = the 5 existing meta-skills. No new general-purpose skills in v1 — that is a
+   deliberately-scoped **post-v1** track, not a v1 gate.
+5. Repo public + README landing. No dedicated site in v1 (post-v1).
+
+Deferred to post-v1: general-purpose skills, bibliography convention, open-shop/
+close-shop, dedicated site.
+
+**Built:**
+
+- `skills/setup-repertoire/SKILL.md` — new "Record the install — the manifest" section.
+  Setup now writes `~/.agent/install-manifest.md` as it works, recording only what it
+  actually created (the safety rule: teardown removes exactly what the manifest lists,
+  nothing pre-existing). Execution narration and end-of-setup updated to mention the
+  manifest and uninstall.
+- `skills/teardown-repertoire/SKILL.md` — new skill. Reads the manifest, presents a
+  plan, reverses every change in safe order (harness wiring → PATH → symlinks → clone →
+  empty dirs → manifest), confirming before removals. Handles a missing manifest by
+  offering cautious reconstruction rather than guessing.
+- `install.sh` — now writes the same manifest, capturing directory/clone pre-existence
+  before `mkdir`/clone so scripted installs are equally reversible. Verified end-to-end
+  against a throwaway HOME: fresh install records what it created; idempotent re-run
+  correctly marks pre-existing dirs/clone as "leave in place".
+- `README.md` — added "Manual install (no agent)" and "Uninstall" sections.
+- `.gitignore` already ignores `/.claude` (session plugin cache — not repo content).
+
+Self-consistency checked on touched files: UK English clean, perspective refs present,
+frontmatter complete, intent language used.
+
+**Still open for v1:** the Fedora retest (item 1) — Adam-run, on the laptop.
+
+---
+
 ## Build queue — in dependency order
 
 ### 1. Fedora laptop retest ← NEXT ACTION
@@ -357,7 +402,11 @@ applied to `docs/agent-dir.md`, `docs/pid-setup.md`, and `bin/PID.md`.
 
 Next audit: run after the skills backlog items are built.
 
-### 5. Uninstall — install manifest and teardown skill
+### 5. Uninstall — install manifest and teardown skill ← DONE 2026-07-01
+
+Both parts built this session — see the session log above. `install-manifest.md` is
+written by both `setup-repertoire` (agent path) and `install.sh` (scripted path);
+`teardown-repertoire` reverses it interactively. Original requirement preserved below.
 
 During the first real install test (Fedora, 2026-05-15), manually reversing the
 installation was needed and the process was opaque. Two things are needed:
