@@ -15,6 +15,30 @@ Read this in full before doing anything. Do not re-litigate settled decisions.
 
 ---
 
+## Start here (2026-07-01)
+
+**We are finishing repertoire to a shippable v1.** The "v1 done" definition is locked
+(see the 2026-07-01 session log below): install works + uninstall exists + manual
+fallback documented + the 5 existing meta-skills + public repo/README. General-purpose
+skills, a dedicated site, bibliography convention, and open-shop/close-shop are all
+**post-v1, not v1 gates.**
+
+**Everything buildable is done and pushed** to `master` (commit `78a0d76`): install
+manifest, `teardown-repertoire` skill, manual-install README section. Working tree is
+clean.
+
+**The single remaining v1 item is the Fedora laptop retest** — an Adam-run
+verification on the physical laptop (a fresh agent here cannot reach it). See build
+queue item 1 for the exact three-step check (install → manifest → uninstall). Once it
+passes, v1 is done.
+
+**If you can't do the Fedora retest**, useful adjacent work: run a local smoke-test of
+the agent-driven `setup-repertoire` → `teardown-repertoire` loop on this WSL machine
+against a throwaway `$HOME` and `file://` clone (the `install.sh` manifest path is
+already verified this way; the agent-driven path and the teardown reversal are not).
+
+---
+
 ## What this repo is
 
 Repertoire is a collection of general-purpose agent skills, standards, and templates
@@ -350,31 +374,40 @@ frontmatter complete, intent language used.
 
 ## Build queue — in dependency order
 
-### 1. Fedora laptop retest ← NEXT ACTION
+### 1. Fedora laptop retest ← NEXT ACTION (the last open v1 item)
 
-setup-repertoire has been rewritten, four install bugs fixed, and audit is now clean
-(all F1–F6 applied; D1–D4 resolved — see audit section below). Retest by pasting
-into a bare pi session on the Fedora laptop:
-
-### 2. Fedora laptop retest
-
-setup-repertoire has been rewritten and four bugs fixed (branch name, find -L,
-PATH guidance, duplicate skills path). Repo is now public. Retest by pasting into a
-bare pi session on the Fedora laptop:
+This is the only thing between here and v1. All code is pushed to `master`
+(commit `78a0d76`, 2026-07-01). The four earlier install bugs are fixed (branch name,
+find -L, PATH guidance, duplicate skills path), audit is clean, and this session added
+the install manifest + teardown. Retest by pasting into a bare pi session on the
+Fedora laptop (fresh env, fish shell — the point of using this machine):
 
 ```
 Set up repertoire on this machine:
 https://raw.githubusercontent.com/burnish-studio/repertoire/master/skills/setup-repertoire/SKILL.md
 ```
 
-Confirm: capabilities check passes, plan presented, interactive walkthrough, bootstrap
-loads in new session, skills visible and auto-trigger.
+**Confirm, in one pass:**
 
-### 3. Skills backlog
+1. **Install** — capabilities check passes, plan presented before acting, interactive
+   walkthrough, bootstrap loads in a new session, skills visible and auto-trigger,
+   `pid --doctor` shows bootstrap + skills path.
+2. **Manifest** — `~/.agent/install-manifest.md` exists and accurately lists what was
+   created (dirs, clone, symlinks, any PATH/shell-config edit).
+3. **Uninstall** — ask the agent to run `teardown-repertoire`; confirm it reads the
+   manifest, presents a plan, reverses cleanly, and leaves nothing dangling (pid gone,
+   symlinks gone, PATH line removed, pre-existing content untouched).
 
-`write-a-skill` is done. Read all four benchmarks before building any of these.
-Matt Pocock’s deprecated `ubiquitous-language` is the best external benchmark for that
-skill specifically.
+Report what breaks; fix in the same push-to-master-and-retest loop (no branches — solo
+project, forward speed is the explicit preference).
+
+### 2. Skills backlog — POST-V1, NOT a v1 gate
+
+Deliberately **out of v1** (Adam's call, 2026-07-01). The list below was a prior
+session's draft Adam did not endorse — `caveman` and others overlap with Matt Pocock's
+skills and were never scoped for repertoire. Do **not** treat these as pending work.
+When a post-v1 general-purpose-skills track opens, scope it fresh with Adam rather than
+inheriting this list. Read all four benchmarks before building any skill.
 
 - `grill-me` — keep it simple; risk is over-engineering
 - `ubiquitous-language` — needs output format, rules, example dialogue; richest of the set
@@ -461,3 +494,10 @@ whatever mechanism is implemented above.
 - Superpowers repo is cloned at `/tmp/pi-github-repos/obra/superpowers` — may not persist across sessions; re-fetch from `https://github.com/obra/superpowers/` if needed
 - `~/.pi/agent/doti/operative/` still exists — old location, safe to delete once confident nothing is missing from it
 - Audit clean as of 2026-05-19. All F1–F6 applied, D1–D4 resolved. See build queue item 4.
+- **Pushing to `master`:** git uses gh's active account as its credential helper
+  (`credential.helper = gh auth git-credential`). The default active account is
+  `flintec-studio`, which **cannot** push to `burnish-studio/repertoire` (403). Two
+  gh accounts are logged in; before pushing run `gh auth switch --user burnish-studio`
+  (switch back with `gh auth switch --user flintec-studio` if you want to restore the
+  default). Adam's workflow: push straight to `master`, test against latest pushed,
+  no branches.
