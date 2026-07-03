@@ -2,7 +2,7 @@
 type: context
 title: Repertoire — Handover
 created: 2026-05-13
-updated: 2026-07-01 (v1 scoping + uninstall)
+updated: 2026-07-03 (delivery architecture grill — ADRs, CONTEXT, scenarios in .plan/)
 status: current
 model: claude-opus-4-8
 ---
@@ -15,7 +15,21 @@ Read this in full before doing anything. Do not re-litigate settled decisions.
 
 ---
 
-## Start here (2026-07-01)
+## Start here (updated 2026-07-03)
+
+**⚠ The delivery architecture was re-grilled from first principles on 2026-07-03. The
+authoritative design now lives in `.plan/`, not in the "multi-harness three-tier" write-up
+below (which is superseded in its specifics).** Read, in order:
+`CONTEXT.md` (glossary) → `.plan/adr/0001–0004` (settled decisions) →
+`.plan/reference/setup-scenarios.md` (spec-by-example + capability matrix + sample
+manifest) → the "2026-07-03 session" log entry below. The 2026-07-02 three-tier entry is
+kept for history but the ADRs supersede it.
+
+**One-line state:** the architectural spine is settled and recorded; nothing in
+`skills/`/`install.sh` has been rewritten yet. Next build step is "step A" — rewrite
+`setup-repertoire` against the scenarios. Working tree has uncommitted new files
+(`CONTEXT.md`, `.plan/`, the 2026-07-03 research doc) + this handover; nothing committed
+or pushed this session.
 
 **We are finishing repertoire to a shippable v1.** The "v1 done" definition is locked
 (see the 2026-07-01 session log below): install works + uninstall exists + manual
@@ -23,19 +37,33 @@ fallback documented + the 5 existing meta-skills + public repo/README. General-p
 skills, a dedicated site, bibliography convention, and open-shop/close-shop are all
 **post-v1, not v1 gates.**
 
-**Everything buildable is done and pushed** to `master` (commit `78a0d76`): install
-manifest, `teardown-repertoire` skill, manual-install README section. Working tree is
-clean.
+**Everything buildable up to 2026-07-01 is pushed** to `master` (commit `78a0d76`):
+install manifest, `teardown-repertoire` skill, manual-install README section.
 
-**The single remaining v1 item is the Fedora laptop retest** — an Adam-run
-verification on the physical laptop (a fresh agent here cannot reach it). See build
-queue item 1 for the exact three-step check (install → manifest → uninstall). Once it
-passes, v1 is done.
+**⚠ Working tree is NOT clean — `_work/HANDOVER.md` has uncommitted edits from the
+2026-07-02 session** (this file: smoke-test log + architecture write-up). Nothing else
+changed. No repo code (skills/standards/install.sh) was touched this session. If you're a
+fresh agent on the same machine, you're already reading the latest. To push, note the
+gh-account gotcha at the bottom (`gh auth switch --user burnish-studio`).
 
-**If you can't do the Fedora retest**, useful adjacent work: run a local smoke-test of
-the agent-driven `setup-repertoire` → `teardown-repertoire` loop on this WSL machine
-against a throwaway `$HOME` and `file://` clone (the `install.sh` manifest path is
-already verified this way; the agent-driven path and the teardown reversal are not).
+**Two live threads:**
+
+1. **Fedora laptop retest** (build queue item 1) — the locked v1 gate. Adam-run on the
+   physical laptop (a fresh agent here cannot reach it); exact three-step check
+   (install → manifest → uninstall) in item 1. Tests the pi/pid path. Once it passes,
+   v1-as-scoped is done. Unaffected by thread 2.
+2. **Multi-harness support** (build queue item 1a) — NEW as of 2026-07-02. Adam wants it;
+   we designed a three-tier ladder (explicit specs / generic paradigm-2 / manual
+   fallback). **The design is written up in the 2026-07-02 "Architecture discussion"
+   session entry — read that in full before doing any of this work.** Resume by getting
+   Adam's explicit yes on the `install.sh = core-only` split (item 1a, resume action 1),
+   then it's a rewrite of `setup-repertoire` + `install.sh` + README.
+
+**2026-07-02 smoke test (context for both threads):** a cold general-purpose agent
+(Claude Code harness, zero project context) ran the full `setup-repertoire` →
+`teardown-repertoire` loop against a throwaway `$HOME`. The round-trip **passed cleanly**
+(nothing dangling; real `~/.agent` verified byte-identical before/after) — but surfaced
+that the non-pi path is under-specified, which is what opened thread 2.
 
 ---
 
@@ -372,6 +400,174 @@ frontmatter complete, intent language used.
 
 ---
 
+## What was done this session (2026-07-02, cold-agent smoke test)
+
+Ran the local smoke-test the previous handover flagged as adjacent work. No repo code
+changed — this session is verification + logging only (this handover is the only edit).
+
+**Method.** Spawned a fresh general-purpose agent under the Claude Code harness with
+**no project context** — it got only the exact user paste line (install instruction +
+raw `setup-repertoire` URL on master) plus one sandbox constraint: a throwaway `$HOME`
+so it could not touch the real `~/.agent`. It fetched the skill cold, installed, wrote
+the manifest, then found and ran `teardown-repertoire` to reverse everything. Observed
+from outside without coaching, to keep the legibility test honest (the current session
+agent is contaminated — it knows the intent — so it cannot be the executor).
+
+**Result — round-trip PASSES.** Install completed first try (no errors); the manifest
+recorded exactly what was created; teardown read the manifest, presented a plan matching
+the install 1:1, reversed in safe order, and left nothing dangling. Independently
+verified: real `~/.agent` byte-identical to a pre-test snapshot (413 entries), `~/bin/pid`
+intact, sandbox home empty. The paradigm-2 "manifest is the agent's own record" design
+works.
+
+**Findings — the non-pi harness path is under-specified.** All three cluster on the skill
+being pi-centric while the README claims it "works with pi, Claude Code, Cursor, and any
+agent":
+
+1. **Claude Code harness wiring is improvised.** `setup-repertoire` frames the target end
+   state around `~/.agent/`, which Claude Code does not read. The wiring section (SKILL.md
+   "Harness wiring") says "use your knowledge of how that harness loads global context" and
+   gives `~/.claude/CLAUDE.md` only as an example. The cold agent had to invent the concrete
+   wiring (a `~/.claude/CLAUDE.md` import line + a `~/.claude/skills` symlink). Because
+   teardown reverses "exactly what the manifest records," teardown safety depends on that
+   improvised manifest, not on the skill — a different agent would wire (and record) it
+   differently.
+2. **The skills-symlink shape assumes pi's loader.** SKILL.md's end state is
+   `~/.agent/skills/repertoire → skills/`, which under Claude Code's discovery
+   (`~/.claude/skills/<name>/SKILL.md`) points at a non-existent `repertoire/SKILL.md`. The
+   agent had to silently correct the model to make discovery work.
+3. **`install.sh` diverges from `SKILL.md` and is never mentioned by it.** Verified in
+   code: `install.sh` has no harness detection — it unconditionally creates `~/bin` and the
+   `pid` symlink (pi-only artefacts) and does **zero** harness wiring. So on a non-pi
+   harness it produces a broken install (spurious unusable `~/bin/pid`; bootstrap/skills
+   never actually load) and a different manifest than the skill's path. Yet the README
+   offers `install.sh` as the "manual install (no agent)" fallback for any user. SKILL.md
+   is, by contrast, explicitly harness-aware ("pid… pi/Unix only", "Do not mention it to
+   users on other harnesses").
+
+### Architecture discussion (same session, 2026-07-02) — three-tier harness support
+
+**Adam's direction (stated this session):** he *does* want to support multiple harnesses.
+The paradigm-2 ideal is to offload environment specifics to the local AI. He proposed:
+do something explicit for a few major harnesses, a generic paradigm-2 catch-all for the
+rest, and — when the catch-all can't manage it — surface the failure and point the user
+to set it up manually. This is a graceful-degradation ladder. It is the agreed **shape**;
+the detail below is the current-agent's refinement, mostly endorsed, with **one point
+still needing Adam's explicit yes** (the `install.sh` split — see end).
+
+**The key insight the ladder was missing.** The smoke test's tier-2 path *succeeded* —
+the cold agent wired Claude Code correctly by improvisation. The fragility is one level
+down and is **orthogonal to the tier count**: install is a creative forward act, but
+**teardown is a replay** — it must reverse *exactly and only* what install did, possibly
+on another machine / another agent / months later. Teardown can't re-improvise; it can
+only replay a record. So the load-bearing artefact is the **manifest** — the contract
+between two independent paradigm-2 acts. The round-trip was clean only because the agent
+*happened* to write a precise manifest. That "happened to" is the real problem: manifest
+quality was luck, not enforced. **Install and teardown are asymmetric; naming that
+asymmetry is the design.**
+
+**The layered model reached:**
+
+- **Universal core (harness-agnostic spine — all tiers build on it):**
+  - the `~/.agent/` structure + clone + symlinks;
+  - the wiring contract stated **abstractly**: "bootstrap loads on every session start;
+    skills are discoverable" — the testable target every tier aims at;
+  - **manifest discipline as a hard requirement, not an emergent property of a capable
+    agent** — every concrete mutation, exact path/file/line, whether it pre-existed. This
+    is what makes tier-2 improvisation *safe* rather than *lucky*;
+  - **verification with teeth**: "loads every session" is only truly confirmable by a
+    *new* session; in-session file/symlink presence is a proxy. Skill should say so and
+    hand the user a one-line self-check ("open a new session, ask if it sees the
+    repertoire skills"). Tier 2 must confirm the end state or fall to tier 3.
+- **Tier 1 — explicit — specs, NOT adapters.** Distinguish a *launcher* (`pid`: runtime,
+  model injection, session start) from *wiring* (install-time static config). Most
+  harnesses wire via static config (Claude Code = a `CLAUDE.md` import + a skills dir;
+  Cursor similar) and need **no adapter** — just a concrete end-state spec so the manifest
+  is deterministic. Only pi is heavyweight because pi *also* has a launcher. So tier-1
+  support is cheap for static-config harnesses; write exact end states, don't build
+  adapters you don't need.
+- **Tier 2 — generic paradigm-2 catch-all.** Agent maps the abstract wiring contract onto
+  its own harness, **must** write a precise manifest, **must** verify the end state, and
+  falls to tier 3 if it can't identify a mechanism *or can't confirm the wiring worked*
+  (not just "can't do it" — "can't verify it").
+- **Tier 3 — manual fallback.** Surface the failure honestly and hand the user the
+  end-state spec to wire themselves (and note teardown is then manual too — symmetric).
+  Insight: **a no-agent install is tier 3 by definition** — with no agent, the human does
+  the paradigm-2 wiring.
+
+**The load-bearing move that dissolves finding #3 — NEEDS ADAM'S EXPLICIT YES:**
+
+> **`install.sh` = tier 3's automation of the universal core.** It does the deterministic
+> part (structure + clone + symlinks + manifest) and does **no** harness wiring — it
+> prints the manual wiring end-state and stops. The agent path (`setup-repertoire`) does
+> core + tier-1/2 wiring on top.
+
+This removes install.sh's hidden pi hard-coding and makes it an honest "no agent" fallback
+(matching what the README already claims). The current divergence wasn't a bug to patch —
+it was a sign the two paths had overlapping responsibilities. Adam ran out of time before
+confirming this split; **first thing to confirm on resume.**
+
+**Scope guidance for v1:** the *architecture* is cheap to decide now (it's just how
+`setup-repertoire` is structured + the `install.sh` split). *Populating* tier-1 is the
+cost. For v1: lock the three-tier structure + manifest/verification hardening + the
+install.sh split; seed tier-1 with **pi (done) + Claude Code (now known from the smoke
+test)**; Cursor and the rest ride tier-2/3 until actually tested. **Resist growing
+tier-1** — every explicit harness is a promise that drifts when that harness changes its
+config mechanism (Superpowers pays exactly this multi-manifest maintenance tax). None of
+this blocks the pi-path Fedora retest (item 1), which is unaffected.
+
+## What was done this session (2026-07-03, delivery architecture grill)
+
+Ran a `grill-with-docs` session on the delivery architecture. No `skills/`/`install.sh`
+code changed — output is design docs in a new `.plan/` tree + `CONTEXT.md` + one research
+doc. **These supersede the 2026-07-02 three-tier specifics.**
+
+**Settled and recorded (`.plan/adr/`):**
+- **0001 Storage/wiring split** — `~/.agent/` is neutral *storage*; "wiring" always means
+  a pointer into the *harness's own* config. pi is one adapter, not the core. Dissolves
+  smoke-test findings #2/#3 architecturally.
+- **0002 Adapter model** — an Adapter is agent-written minimal wiring (static: import line
+  + skill registration; or a launcher like `pid`). B-spine + native-plugin opt-in. Clean
+  mode is launcher-only; static-wiring harnesses are Additive-only. *(Weighting under
+  review — see open item 1.)*
+- **0003 Delivery flows** — lifecycle ops (setup/teardown/update/doctor) are agent-driven
+  interactive "CLI-style" flows; detect-then-confirm OS+harness; **one pass can wire
+  multiple harnesses** (one Core, N adapters); `install.sh` is core-only + honest manual
+  fallback.
+- **0004 Manifest schema** — the manifest is a defined, per-adapter, verifiable schema
+  (install.sh writes deterministic core rows; the flow adds per-adapter rows; `doctor`
+  diffs against reality). **New requirement:** an "edited shared file" entry kind
+  (marker-delimited block) for Codex `AGENTS.md` / Claude `CLAUDE.md` in-place edits.
+
+**Key findings (in `.plan/reference/setup-scenarios.md` — capability matrix + a sample
+multi-harness manifest):**
+- The **End state is two independent capabilities** (bootstrap-loads; skills-discoverable),
+  reported per-half.
+- **"What to do" is liftable from working integrations** (Superpowers manifests/hooks;
+  Matt Pocock `link-skills.sh`); **"who does it" stays paradigm-2.** This reframes the
+  build as *adaptation of known-good recipes*, not invention.
+- **The skills half is largely a solved standard problem:** the `skills` npm CLI supports
+  72 agents; a big "Universal" cluster reads one standard dir `.agents/skills`
+  (agentskills.io). Only Claude Code (`.claude/skills`) and pi (launcher) are special.
+  The remaining per-harness variation is the **bootstrap half**.
+- Superpowers' **plugin format is uniform** across Claude/Codex/Cursor (`"skills":
+  "./skills/"` + sessionStart hooks) — the "multi-manifest tax" is smaller than feared,
+  which may promote the plugin from opt-in to primary tier-1 recipe (open item 1).
+
+**Open for next session (all light, none blocking):**
+1. Re-weigh ADR-0002: lift Superpowers' plugin manifests as the *primary* tier-1 recipe
+   for plugin-harnesses (keep hand-rolled for pi + no-plugin fallbacks)?
+2. Verify exact canonical `.agents/skills` paths (Global vs Project) in the agentskills.io
+   standard; fold End-state-is-two-capabilities + Codex/Cursor corrections into ADR-0004.
+3. Housekeeping: does the `document-metadata` standard govern `.plan/` + `CONTEXT.md`, or
+   are they exempt like README/`base/`? (Currently left frontmatter-free; the 2026-07-03
+   research doc *does* have frontmatter — reconcile.)
+4. **Then step A** — rewrite `setup-repertoire` against the scenarios, then `install.sh`
+   (core-only) + README, then re-run the cold-agent smoke test.
+
+Nothing committed/pushed this session. New untracked: `CONTEXT.md`, `.plan/`,
+`_work/2026-07-03_research-doc_harness-conventions-audit-01--opus-4-8.md`.
+
 ## Build queue — in dependency order
 
 ### 1. Fedora laptop retest ← NEXT ACTION (the last open v1 item)
@@ -400,6 +596,42 @@ https://raw.githubusercontent.com/burnish-studio/repertoire/master/skills/setup-
 
 Report what breaks; fix in the same push-to-master-and-retest loop (no branches — solo
 project, forward speed is the explicit preference).
+
+### 1a. Multi-harness support — three-tier design (from the 2026-07-02 architecture discussion)
+
+Adam wants multi-harness support. The **shape is agreed** (three-tier ladder); the full
+design is written up in the 2026-07-02 "Architecture discussion" session entry above —
+read it before touching anything. Summary of the layered model: universal harness-agnostic
+core (structure + abstract wiring contract + **enforced manifest discipline** + real
+verification) → tier 1 explicit **end-state specs** (not adapters; pi + Claude Code for
+v1) → tier 2 generic paradigm-2 catch-all (must write manifest, must verify, else
+fall through) → tier 3 manual fallback (surface failure, hand user the end-state spec).
+
+**Resume actions, in order:**
+
+1. **Get Adam's explicit yes on the load-bearing move:** `install.sh` becomes
+   **core-only** (structure + clone + symlinks + manifest, **no** harness wiring; prints
+   the manual wiring end-state and stops). `setup-repertoire` does core + tier-1/2 wiring.
+   This dissolves finding #3. Everything below assumes this yes.
+2. **Rewrite `setup-repertoire/SKILL.md`** around the three tiers: state the wiring
+   contract abstractly; add concrete tier-1 end-state specs for pi and Claude Code
+   (Claude Code = `~/.claude/CLAUDE.md` import line + skills registration at
+   `~/.claude/skills/<name>/SKILL.md` shape — note the current `~/.agent/skills/repertoire
+   → skills/` symlink assumes pi's loader, finding #2); make manifest discipline a hard
+   requirement for every tier; add a verification step + user self-check; specify the
+   tier-3 fall-through trigger ("can't identify a mechanism *or can't verify*").
+3. **Rework `install.sh`** to core-only per the split; drop the unconditional `~/bin`/`pid`
+   creation and pi assumptions; have it print the manual (tier-3) wiring end-state.
+4. **Reconcile the README:** its "works with pi, Claude Code, Cursor, and any agent" claim
+   becomes honest under the tiers; keep the `install.sh` manual-install section but frame
+   it as core-only + manual wiring.
+5. **Update `teardown-repertoire`** only if the manifest format changes — its contract
+   (reverse exactly what the manifest records) already holds; verify it still does.
+6. Run `skills/audit/SKILL.md` after (skills/standards/templates touched). Then re-run the
+   cold-agent smoke test to confirm the new tier-2 path + manifest hold.
+
+**Resist growing tier-1** beyond pi + Claude Code for v1 (Cursor etc. ride tier-2/3 until
+tested). Does not block item 1 (Fedora retest exercises the pi path, unaffected).
 
 ### 2. Skills backlog — POST-V1, NOT a v1 gate
 
