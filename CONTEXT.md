@@ -4,76 +4,69 @@ title: Repertoire — Glossary
 created: 2026-07-03
 updated: 2026-07-03
 status: current
-model: opus-4-8
+model: fable-5
 ---
 
 # Repertoire
 
-> Note: several terms below (Launcher, Harness detection, Scope) were coined for the
-> global-first delivery model superseded by ADR-0005. They remain defined here until the
-> local-first design session revises this glossary.
-
-Repertoire is a standalone base layer of agent skills, standards, and templates, plus
-the delivery machinery that makes that content load inside any agent harness. This
-glossary fixes the language of the delivery architecture so decisions downstream stay
-consistent.
+Repertoire is a standalone base layer of agent skills, standards, and templates, and —
+first and foremost — the **authoring loop** that lets a project create its own. This
+glossary fixes the language of the local-first delivery model (ADR-0005 onward) so
+decisions downstream stay consistent. Terms of the superseded global-first model
+(Adapter, Launcher, Harness detection, Scope, Composition mode) are retired; they remain
+defined in this file's history and on the `global-first` branch.
 
 ## Language
 
 **Core**:
-The standalone, semantically meaningful content — skills, standards, templates — stored
-in a neutral location that belongs to no single harness. The canonical single source of
-truth; everything else refers back to it.
-_Avoid_: repo, install, package
+The canonical content of the repertoire repository — skills, standards, templates,
+bootstrap. The single source of truth that projects vendor from.
+_Avoid_: package, framework, library
 
-**Adapter**:
-The per-harness binding that makes the Core load inside one harness. One Adapter per
-harness; many can coexist, all pointing at the single Core. Realised either as static
-wiring or as a launcher.
-_Avoid_: integration, plugin, connector
+**Vendored**:
+An artefact copied from the Core into a project by `rep` and listed in the lock.
+Tool-owned: `rep update` may rewrite it, and hand-edits are drift that `rep status`
+flags.
+_Avoid_: installed, imported
 
-**Static wiring**:
-An Adapter realised as symlinks or import lines placed into the harness's own config
-location, so the harness loads Core content on its own. The cheap, common case.
-_Avoid_: hook, glue
+**Authored**:
+An artefact a project creates through the authoring loop. Not in the lock; never touched
+by `rep`. First-class: discovered, compiled, and audited identically to vendored
+artefacts.
+_Avoid_: custom, local, user-defined
 
-**Launcher**:
-An Adapter realised as a runtime shim (e.g. `pid`) that controls what the harness loads
-at launch — needed only by harnesses that require flag injection rather than static
-config. The expensive case.
-_Avoid_: wrapper, runner
+**Authoring loop**:
+The capability repertoire installs: writing new, well-formed skills, standards, and
+templates for the host project using `write-a-skill`, `write-a-standard`, `codify`, and
+`audit`. The primary post-install purpose of the repertoire.
+_Avoid_: meta-skills (as a name for the capability)
 
-**End state**:
-The harness-agnostic target every Adapter aims at: the bootstrap loads on every session,
-and Repertoire skills are discoverable. Stated abstractly; realised differently per
-harness. The thing an install verifies and a teardown reverses.
-_Avoid_: goal, config
+**Lock** (`repertoire.lock`):
+The record of what `rep` vendored: source repo, pinned ref, and per-artefact path and
+content hash. The ownership boundary — `rep` touches only what the lock lists — and the
+input to `update`, `remove`, and `status`.
+_Avoid_: manifest (the superseded global-first concept)
 
-**Integration surface**:
-The set of files, locations, and launch flags a given harness exposes that external
-tooling can write to or pass in order to make it load content. Static-wiring harnesses
-expose config files and directories; launcher harnesses expose launch flags. Small and
-file-based for most harnesses — the reason paradigm-2 delegation is viable.
-_Avoid_: API, hook points
+**Stance block**:
+The single marker-delimited block (`<!-- repertoire:start -->` … `<!-- repertoire:end -->`)
+`rep` writes into the project's `AGENTS.md`: the bootstrap plus the compiled operative
+norms of all standards present, vendored and authored alike.
+_Avoid_: bootstrap injection, context block
 
-**Harness detection**:
-Establishing which harness and OS the setup is running in by inspecting environmental
-evidence (env vars, config directories, available flags) and confirming with the user —
-rather than assuming the agent introspectively knows its own harness.
-_Avoid_: sniffing, autodetect
+**Norm compilation**:
+Extracting each standard's operative norm — the body content above the first `---` rule,
+excluding the perspective reference — and concatenating them into the stance block. The
+norm/thesis structure of standards makes this structural, not duplicated metadata.
+_Avoid_: summarising (compilation is verbatim extraction)
 
-**Delivery flow**:
-An interactive, agent-driven process for one lifecycle operation — setup, teardown,
-update, or doctor — in which the agent acts as a CLI for the user, detecting and
-confirming before acting. Realised as a skill (the flow spec); the agent is the runtime.
-_Avoid_: installer, wizard, script
+**Pointer**:
+A one-line per-harness redirection to the stance block's single home, e.g. a `CLAUDE.md`
+containing `@AGENTS.md`. Written only where a harness verifiably does not read
+`AGENTS.md` itself.
+_Avoid_: duplicate block, mirror
 
-**Scope**:
-Whether an Adapter's binding applies everywhere (**Global**) or only inside one project
-(**Local**).
-
-**Composition mode**:
-How Repertoire sits relative to the user's existing setup. **Additive**: Repertoire
-joins onto the user's existing prompts and skills. **Clean**: Repertoire only, the
-user's existing setup suppressed for that session.
-_Avoid_: merge/override (for the pair); replace (use Clean)
+**Tree**:
+The uniform per-project artefact layout `.agents/{skills,standards,templates}/<name>/`,
+holding vendored and authored artefacts side by side. `.agents/skills` follows the
+agentskills.io open standard.
+_Avoid_: install directory, repertoire directory

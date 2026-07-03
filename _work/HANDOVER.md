@@ -33,9 +33,38 @@ on 2026-07-03 — read `_work/2026-07-03_research-doc_project-review-and-plan-01
 Its phased plan (0 hygiene → 1 design lock → 2 build `rep` → 3 content → 4 publish) is
 the operative plan, endorsed by Adam ("proceed as you see best"). Phase 0 is done.
 
-**Next session:** Phase 1 — the design-lock grill: the two open questions below (agent
-behaviour, human workflow) plus ADR-0006 fixing `rep`'s command surface, project layout,
-lockfile, norms compilation, and selection granularity. Delegation policy (also endorsed):
+**Phase 1 grill, round 1 — DONE (same session, 2026-07-03).** Six decisions locked with
+Adam, recorded in ADR-0006/0007/0008 + a rewritten CONTEXT.md glossary:
+
+1. **Own stack first** — public consumability is a constraint, not the driver; Station AI
+   is the first consumer.
+2. **Purpose reframed: the authoring loop is the product.** Repertoire installed =
+   the capability to write well-formed skills/standards for the host project. The
+   meta-skills are not a maintainer set; they are the point. (Softens the review doc's
+   "content gap" — practice skills are demonstrations, not the definition.)
+3. **Uniform project tree (ADR-0006)** — `.agents/{skills,standards,templates}/<name>/`,
+   vendored + authored side by side; `repertoire.lock` (source, pinned ref, hashes) is the
+   ownership boundary; standards vendor as an indivisible set, skills à la carte; the
+   stance compiler treats authored standards identically to vendored ones. Norm
+   extraction is structural: body above the first `---`.
+4. **Stance home (ADR-0007)** — one marker-delimited block in `AGENTS.md`; other context
+   files get one-line pointers (`CLAUDE.md` → `@AGENTS.md`), never copies.
+5. **rep lives in the repertoire repo (ADR-0008)** — `package.json` bin + single
+   dependency-free `bin/rep.mjs`; invoked `npx github:burnish-studio/repertoire init`;
+   no npm publish for now; tool + content pin as one ref.
+6. Matt Pocock's `skills-lock.json` (temporarily at repo root, gitignored) is the
+   reference shape for the lock.
+
+**Next session — Phase 1 round 2, then Phase 2:** (a) the two original open questions
+(agent behaviour; human workflow) — these feed the bootstrap rewrite; (b) the `model:`
+frontmatter field decision (review doc recommends dropping it on enduring artefacts);
+(c) verification items: does current Claude Code read `AGENTS.md` and/or `.agents/skills`
+natively (test with a fresh session in a scratch project), and agentskills.io frontmatter
+compatibility; (d) then write the Phase 2 build brief for `rep` v0 (sonnet-class
+executor; acceptance test in the review doc) — command surface: `init` / `add` /
+`remove` / `update` / `status` / `compile`.
+
+Delegation policy (also endorsed):
 frontier model for grills/ADRs/bootstrap/norm-prose/reviews; cheaper models for Phase 0/2/4
 execution against briefs with verifiers; cold-test with weak models deliberately.
 
