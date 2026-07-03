@@ -55,14 +55,30 @@ Adam, recorded in ADR-0006/0007/0008 + a rewritten CONTEXT.md glossary:
 6. Matt Pocock's `skills-lock.json` (temporarily at repo root, gitignored) is the
    reference shape for the lock.
 
-**Next session — Phase 1 round 2, then Phase 2:** (a) the two original open questions
-(agent behaviour; human workflow) — these feed the bootstrap rewrite; (b) the `model:`
-frontmatter field decision (review doc recommends dropping it on enduring artefacts);
-(c) verification items: does current Claude Code read `AGENTS.md` and/or `.agents/skills`
-natively (test with a fresh session in a scratch project), and agentskills.io frontmatter
-compatibility; (d) then write the Phase 2 build brief for `rep` v0 (sonnet-class
-executor; acceptance test in the review doc) — command surface: `init` / `add` /
-`remove` / `update` / `status` / `compile`.
+**Same session, later (2026-07-03): verification + bootstrap + brief — DONE.**
+
+- **Verified empirically** (headless `claude -p` probes in a scratch project): Claude
+  Code reads **neither** `AGENTS.md` **nor** `.agents/skills/` natively; the
+  `CLAUDE.md` → `@AGENTS.md` pointer **works**, and relative symlinks
+  `.claude/skills/<name> → ../../.agents/skills/<name>` **work**. Results folded into
+  ADRs 0006/0007. rep therefore always writes the pointer + symlinks for Claude Code.
+- **`base/bootstrap.md` rewritten** as the firmware preamble (stance framing, binding
+  norms follow, skills proactivity, authoring-loop posture). Frontmatter-exempt as
+  before.
+- **Phase 2 build brief written**: `_work/2026-07-03_brief_rep-v0-build-01--fable-5.md`
+  — fully self-contained for a sonnet-class executor. Locked: lockfile schema, stance
+  block format, norm-extraction rule, command surface (`init/add/remove/update/status/
+  compile`), acceptance tests incl. byte-clean removal. Review the built code against
+  the brief line by line (frontier-model review pass).
+- README now opens with the product statement: "Rational firmware for agent projects."
+
+**Next session — execute Phase 2:** run the brief (delegate to sonnet-class; the brief
+is the entire context it needs), review, then live smoke test: `rep init` in a scratch
+project → fresh Claude Code + pi sessions → stance active, skills trigger; then stand
+it up inside Station AI (the real test). Still parked (deliberately, none blocking):
+agent-behaviour + human-workflow grill questions (feed future bootstrap tuning), the
+`model:` field decision, agentskills.io frontmatter compat check, practice skills
+(handover/grill/write-up/adr).
 
 Delegation policy (also endorsed):
 frontier model for grills/ADRs/bootstrap/norm-prose/reviews; cheaper models for Phase 0/2/4

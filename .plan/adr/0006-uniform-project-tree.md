@@ -40,5 +40,6 @@ and the hash makes drift in vendored files detectable (`rep status`).
   presence. No `norm:` frontmatter field to drift from the body.
 - Editing a vendored file in place is drift, not customisation — `rep status` flags it;
   the supported route is authoring a project standard/skill alongside.
-- Claude Code discovery of `.agents/skills` is unverified; if absent, `rep` additionally
-  writes `.claude/skills/*` symlinks for that harness (verification item).
+- Claude Code does **not** discover `.agents/skills` natively (verified empirically
+  2026-07-03, headless probe), so `rep` additionally writes per-skill relative symlinks
+  `.claude/skills/<name> → ../../.agents/skills/<name>` — verified working the same day.

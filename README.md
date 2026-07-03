@@ -1,8 +1,11 @@
 # Repertoire
 
-A collection of skills, standards, and templates for intelligent agent work. A
-standalone base layer — no dependencies, no framework assumptions. Other projects
-build on it; it builds on nothing.
+Rational firmware for agent projects. Repertoire stands up, inside any project, a
+philosophical stance and an authoring toolkit — standards that govern, skills that
+act, templates that show form — so the project's agent is well-positioned and
+well-tooled for creating artefacts meant for agent consumption. A standalone base
+layer — no dependencies, no framework assumptions. Other projects build on it; it
+builds on nothing.
 
 ---
 

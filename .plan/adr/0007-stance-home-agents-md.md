@@ -26,8 +26,9 @@ the superseded manifest design (ADR-0004).
 
 ## Consequences
 
-- Whether current Claude Code reads `AGENTS.md` natively is a verification item; if it
-  does, the `CLAUDE.md` pointer is skipped entirely.
+- Claude Code does **not** read `AGENTS.md` natively (verified empirically 2026-07-03,
+  headless probe), so the `CLAUDE.md` → `@AGENTS.md` pointer is required for it — and
+  verified working the same day (imported content and a probe answer round-tripped).
 - `rep update` regenerates the block in place (norms may have changed); the diff of the
   block is the human-reviewable record that the project's operative stance changed.
 - User content in `AGENTS.md` outside the markers is never touched.
