@@ -44,3 +44,7 @@ next-env.d.ts
 
 # claude
 /.claude
+
+# temporarily installed third-party skills (skills CLI) — not repo content
+/.agents
+/skills-lock.json

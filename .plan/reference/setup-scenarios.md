@@ -1,4 +1,18 @@
+---
+type: context
+title: Setup Scenarios — Global-First End States
+created: 2026-07-03
+updated: 2026-07-03
+status: deprecated
+model: opus-4-8
+---
+
 # Setup Scenarios — the ideal end state per harness and OS
+
+> **Superseded by [ADR-0005](../adr/0005-local-first-delivery.md)**: these scenarios
+> describe global-scope wiring. The harness-convention findings (§ "Findings that feed
+> back into the design", esp. items 5–6 on the `.agents/skills` standard and the `skills`
+> CLI) remain live input to the `rep` design.
 
 Spec-by-example for Repertoire delivery. Each scenario describes the *ideal* concrete end
 state a setup flow should reach, the exact wiring it performs, and the manifest it writes.

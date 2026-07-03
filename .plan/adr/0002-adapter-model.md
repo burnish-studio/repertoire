@@ -1,4 +1,16 @@
+---
+type: context
+title: ADR-0002 — Adapter Model
+created: 2026-07-03
+updated: 2026-07-03
+status: deprecated
+model: opus-4-8
+---
+
 # Adapters are agent-written minimal wiring; native plugins are opt-in
+
+> **Superseded by [ADR-0005](0005-local-first-delivery.md)** (local-first delivery).
+> Preserved as the record of the global-first design.
 
 An **Adapter** — the per-harness binding that makes the Core load — is realised as the
 minimal wiring the local agent writes: either **static wiring** (an `@import` line into

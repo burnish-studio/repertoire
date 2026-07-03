@@ -1,4 +1,16 @@
+---
+type: context
+title: ADR-0003 — Delivery Flows
+created: 2026-07-03
+updated: 2026-07-03
+status: deprecated
+model: opus-4-8
+---
+
 # Delivery is agent-driven interactive flows; install.sh is core-only
+
+> **Superseded by [ADR-0005](0005-local-first-delivery.md)** (local-first delivery).
+> Preserved as the record of the global-first design.
 
 Each lifecycle operation — setup, teardown, and (proposed) update and doctor — is an
 interactive **delivery flow** in which the local agent acts as a CLI for the user: it

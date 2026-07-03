@@ -1,4 +1,17 @@
+---
+type: context
+title: Repertoire — Glossary
+created: 2026-07-03
+updated: 2026-07-03
+status: current
+model: opus-4-8
+---
+
 # Repertoire
+
+> Note: several terms below (Launcher, Harness detection, Scope) were coined for the
+> global-first delivery model superseded by ADR-0005. They remain defined here until the
+> local-first design session revises this glossary.
 
 Repertoire is a standalone base layer of agent skills, standards, and templates, plus
 the delivery machinery that makes that content load inside any agent harness. This

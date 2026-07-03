@@ -1,3 +1,12 @@
+---
+type: context
+title: ADR-0005 — Local-First Delivery
+created: 2026-07-03
+updated: 2026-07-03
+status: current
+model: deepseek-v4-pro
+---
+
 # Repertoire is installed per-project, not globally
 
 Repertoire's delivery model is **local-first**: it is called into each project explicitly

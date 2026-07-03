@@ -1,4 +1,16 @@
+---
+type: context
+title: ADR-0001 — Storage/Wiring Split
+created: 2026-07-03
+updated: 2026-07-03
+status: deprecated
+model: opus-4-8
+---
+
 # Core is neutral storage; wiring targets each harness's own config
+
+> **Superseded by [ADR-0005](0005-local-first-delivery.md)** (local-first delivery).
+> Preserved as the record of the global-first design.
 
 Repertoire's canonical content (the **Core**) lives in a neutral location owned by no
 harness (`~/.agent/`), and "wiring" always means placing a pointer into the **harness's

@@ -26,43 +26,21 @@ agent to reach it.
 
 ## Install
 
-Open any agent session with file system and shell access and paste:
+Repertoire is **local-first**: it is called into each project explicitly, like a
+dependency — not installed globally and auto-injected everywhere. Starting empty and
+including deliberately is the point: the context window is the most expensive resource
+in agentic engineering.
 
-```
-Set up repertoire on this machine:
-https://raw.githubusercontent.com/burnish-studio/repertoire/master/skills/setup-repertoire/SKILL.md
-```
+The delivery tool (`rep`) is in development. It will scaffold repertoire into a
+project (`rep init`), keep it updated against a pinned version (`rep update`), and
+remove it cleanly (`rep remove`). Until it ships, the content is usable directly:
+clone the repo and copy the skills and standards you want into your project's agent
+configuration.
 
-The agent fetches the skill, checks capabilities, detects your OS and every agent
-harness on the machine, and wires each one in a single interactive pass — recording a
-reversible manifest as it goes. It has explicit support for **pi** (via the `pid`
-launcher) and **Claude Code** (via `~/.claude/` wiring), and a generic path for any
-other harness that loads global context and discovers skills. Web-only agents cannot
-complete this installation — the skill will say so immediately.
-
-**Requirements:** git, an agent with file system access and shell execution.
-
-### Manual install (no agent)
-
-The Core installs the same everywhere; only the per-harness wiring differs. If you would
-rather run it yourself, clone the repo and run the installer. It does the harness-agnostic
-**Core** — the `~/.agent/` storage layout, the clone, the core symlinks, and the core rows
-of the install manifest — then prints the wiring end-state for your harness(es):
-
-```
-git clone https://github.com/burnish-studio/repertoire ~/.agent/repos/repertoire
-bash ~/.agent/repos/repertoire/install.sh
-```
-
-The installer is idempotent — safe to re-run to update. It deliberately does **no** harness
-wiring (with no agent to detect and record it, wiring is yours to apply from the printed
-end-state). The agent-driven path above detects and wires every harness for you.
-
-### Uninstall
-
-Ask any capable agent to run the `teardown-repertoire` skill. It reads
-`~/.agent/install-manifest.md` and reverses every recorded change interactively,
-removing only what the install created.
+The previous global installation model (a `~/.agent/` convention, the `pid` launcher,
+and agent-driven setup/teardown flows) is superseded — see `.plan/adr/0005` — and
+preserved on the [`global-first`](https://github.com/burnish-studio/repertoire/tree/global-first)
+branch.
 
 ---
 
@@ -72,6 +50,8 @@ removing only what the install created.
 skills/       ← agent briefings; one directory per skill, each with SKILL.md
 standards/    ← normative positions; one directory per standard, each with STANDARD.md
 templates/    ← copyable forms; one directory per template, each with TEMPLATE.md
+base/         ← the bootstrap injected into project context
+.plan/        ← architecture decision records and design references
 _work/        ← research notes and session documents
 ```
 

@@ -2,9 +2,9 @@
 type: context
 title: Repertoire — Handover
 created: 2026-05-13
-updated: 2026-07-03 (workflow & scope grill — local-first pivot, ADR-0005)
+updated: 2026-07-03 (session 3 — full project review, Phase 0 hygiene executed)
 status: current
-model: deepseek-v4-pro
+model: fable-5
 ---
 
 # Repertoire — Handover
@@ -28,11 +28,25 @@ A CLI tool (`rep`) scaffolds repertoire into a project on demand — `rep init`,
 no launcher. The bootstrap shifts from skills-discovery nudge to operative philosophy
 injection (fallibilism, collaboration, programming paradigm). Every project stands alone.
 
-**Next session:** continue the workflow & scope grill (questions 2 and 3 below).
+**A full cold review of the project (philosophy, form, content, delivery, plan) was run
+on 2026-07-03 — read `_work/2026-07-03_research-doc_project-review-and-plan-01--fable-5.md`.**
+Its phased plan (0 hygiene → 1 design lock → 2 build `rep` → 3 content → 4 publish) is
+the operative plan, endorsed by Adam ("proceed as you see best"). Phase 0 is done.
 
-**Git state:** `master` is now local-first (ADR-0005). The global-first delivery
-architecture (ADRs 0001–0004, step-A build) is preserved on the `global-first` branch.
-Working tree is clean aside from this handover update and ADR-0005.
+**Next session:** Phase 1 — the design-lock grill: the two open questions below (agent
+behaviour, human workflow) plus ADR-0006 fixing `rep`'s command surface, project layout,
+lockfile, norms compilation, and selection granularity. Delegation policy (also endorsed):
+frontier model for grills/ADRs/bootstrap/norm-prose/reviews; cheaper models for Phase 0/2/4
+execution against briefs with verifiers; cold-test with weak models deliberately.
+
+**Git state:** `master` is local-first and pruned — the global-first machinery
+(`install.sh`, `bin/`, `docs/`, `setup-repertoire`, `teardown-repertoire`) now lives only
+on the `global-first` branch (created and pushed this session; it previously existed only
+as a claim in ADR-0005). `v0.1.0` tagged. LICENSE (MIT) added. `.plan/` + `CONTEXT.md`
+now carry frontmatter (open item 3 resolved: they conform; ADRs 0001–0004 and
+setup-scenarios marked `deprecated`, superseded by 0005). Matt Pocock's skills are
+temporarily installed at `.agents/` via the `skills` CLI (gitignored; its
+`skills-lock.json` is reference material for the `rep` lockfile design).
 
 ---
 

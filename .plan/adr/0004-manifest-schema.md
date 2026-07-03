@@ -1,4 +1,17 @@
+---
+type: context
+title: ADR-0004 — Manifest Schema
+created: 2026-07-03
+updated: 2026-07-03
+status: deprecated
+model: opus-4-8
+---
+
 # The install manifest is a defined, per-adapter, verifiable schema
+
+> **Superseded by [ADR-0005](0005-local-first-delivery.md)** (local-first delivery).
+> The principle — a deterministic, verifiable record of what delivery changed — survives
+> as the `rep` lockfile.
 
 The install manifest is a **structured record with a mandated schema**, not free-form
 prose. Three layers: `install.sh` writes the deterministic core rows (dirs / clone /
