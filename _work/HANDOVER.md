@@ -2,9 +2,9 @@
 type: context
 title: Repertoire — Handover
 created: 2026-05-13
-updated: 2026-07-03 (delivery architecture grill — ADRs, CONTEXT, scenarios in .plan/)
+updated: 2026-07-03 (workflow & scope grill — local-first pivot, ADR-0005)
 status: current
-model: claude-opus-4-8
+model: deepseek-v4-pro
 ---
 
 # Repertoire — Handover
@@ -17,111 +17,68 @@ Read this in full before doing anything. Do not re-litigate settled decisions.
 
 ## Start here (updated 2026-07-03)
 
-**⚠ The delivery architecture was re-grilled from first principles on 2026-07-03. The
-authoritative design now lives in `.plan/`, not in the "multi-harness three-tier" write-up
-below (which is superseded in its specifics).** Read, in order:
-`CONTEXT.md` (glossary) → `.plan/adr/0001–0004` (settled decisions) →
-`.plan/reference/setup-scenarios.md` (spec-by-example + capability matrix + sample
-manifest) → the "2026-07-03 session" log entry below. The 2026-07-02 three-tier entry is
-kept for history but the ADRs supersede it.
+**⚠ The global-first delivery architecture (ADRs 0001–0004, `~/.agent/`, `pid`,
+multi-harness wiring, `setup-repertoire`, `teardown-repertoire`, `install.sh`) has been
+superseded by a local-first model. Read ADR-0005 first.** The global-first work is
+preserved on the `global-first` branch for posterity.
 
-**One-line state (updated 2026-07-03 session 2):** **step A is now built and
-locally verified.** `setup-repertoire`, `teardown-repertoire`, `install.sh`, and
-`README.md` have all been rewritten against the `.plan/` design (multi-harness, two
-capabilities, per-adapter manifest, core-only `install.sh`). A mechanical round-trip of
-the flagship scenario (pi + Claude Code, with a pre-existing `~/.claude/CLAUDE.md`)
-passed cleanly — install core-only, both adapters wired, `pid --doctor` saw
-bootstrap+skills, teardown removed the marker block byte-clean leaving the user's
-`CLAUDE.md` intact, nothing dangling. **Not yet committed/pushed** (see the 2026-07-03
-session-2 log). The remaining gate is a real-machine test (Adam, pi + Claude Code on the
-Fedora laptop) and, optionally, a cold-agent smoke test of the new tier-2 path.
+**Local-first model (ADR-0005):** repertoire is installed per-project, not globally.
+A CLI tool (`rep`) scaffolds repertoire into a project on demand — `rep init`,
+`rep add`, `rep update`, `rep remove`. No `~/.agent/`, no global bootstrap injection,
+no launcher. The bootstrap shifts from skills-discovery nudge to operative philosophy
+injection (fallibilism, collaboration, programming paradigm). Every project stands alone.
 
-**If you are a fresh session opened to run the workflow & scope grill, go straight to
-"Next session — workflow & scope grill (planned)" below** — that is the planned next work,
-and it is intentionally separate from the delivery thread above.
+**Next session:** continue the workflow & scope grill (questions 2 and 3 below).
 
-**We are finishing repertoire to a shippable v1.** The "v1 done" definition is locked
-(see the 2026-07-01 session log below): install works + uninstall exists + manual
-fallback documented + the 5 existing meta-skills + public repo/README. General-purpose
-skills, a dedicated site, bibliography convention, and open-shop/close-shop are all
-**post-v1, not v1 gates.**
-
-**Everything buildable up to 2026-07-01 is pushed** to `master` (commit `78a0d76`):
-install manifest, `teardown-repertoire` skill, manual-install README section.
-
-**⚠ Working tree is NOT clean — `_work/HANDOVER.md` has uncommitted edits from the
-2026-07-02 session** (this file: smoke-test log + architecture write-up). Nothing else
-changed. No repo code (skills/standards/install.sh) was touched this session. If you're a
-fresh agent on the same machine, you're already reading the latest. To push, note the
-gh-account gotcha at the bottom (`gh auth switch --user burnish-studio`).
-
-**Two live threads:**
-
-1. **Fedora laptop retest** (build queue item 1) — the locked v1 gate. Adam-run on the
-   physical laptop (a fresh agent here cannot reach it); exact three-step check
-   (install → manifest → uninstall) in item 1. Tests the pi/pid path. Once it passes,
-   v1-as-scoped is done. Unaffected by thread 2.
-2. **Multi-harness support** (build queue item 1a) — NEW as of 2026-07-02. Adam wants it;
-   we designed a three-tier ladder (explicit specs / generic paradigm-2 / manual
-   fallback). **The design is written up in the 2026-07-02 "Architecture discussion"
-   session entry — read that in full before doing any of this work.** Resume by getting
-   Adam's explicit yes on the `install.sh = core-only` split (item 1a, resume action 1),
-   then it's a rewrite of `setup-repertoire` + `install.sh` + README.
-
-**2026-07-02 smoke test (context for both threads):** a cold general-purpose agent
-(Claude Code harness, zero project context) ran the full `setup-repertoire` →
-`teardown-repertoire` loop against a throwaway `$HOME`. The round-trip **passed cleanly**
-(nothing dangling; real `~/.agent` verified byte-identical before/after) — but surfaced
-that the non-pi path is under-specified, which is what opened thread 2.
+**Git state:** `master` is now local-first (ADR-0005). The global-first delivery
+architecture (ADRs 0001–0004, step-A build) is preserved on the `global-first` branch.
+Working tree is clean aside from this handover update and ADR-0005.
 
 ---
 
-## Next session — workflow & scope grill (planned, 2026-07-03)
+## What was done this session (2026-07-03, workflow & scope grill — part 1)
 
-**This is the intended next piece of work, and it is deliberately a fresh session** (kept
-out of the delivery-architecture session so the context is clean). Adam wants a series of
-**`grill-me`** sessions — moving later to **`grill-with-docs`** + **`codify`** once positions
-firm up — on three linked questions:
+Ran a `grill-with-docs` session on the three linked questions from the planned next
+session. Only question 1 (scope) was completed; questions 2 (agent behaviour) and 3
+(human workflow) remain for the next session.
 
-1. **How a good workflow should look — how Adam wants to work.** The freedoms, tooling, and
-   agent behaviour he wants day to day.
-2. **What freedoms/behaviour the agent should have** — autonomy level, when to push back vs
-   defer (this is exactly what `standards/collaboration/` governs), when to act vs ask,
-   how much to narrate.
-3. **The sensible scope of what repertoire should service** — where repertoire's remit ends
-   and the layers above it (Station AI, Doti) begin.
+### Settled
 
-**Reading for that agent (in order):** `CONTEXT.md` → the three philosophical standards
-(`fallibilism`, `collaboration`, `programming-paradigm` — these *are* the worldview under
-discussion) → the v1 scope + post-v1 deferrals below → this section.
+- **Local-first delivery model (ADR-0005).** Repertoire is installed per-project via a
+  CLI tool (`rep`), not globally. No `~/.agent/`, no global bootstrap injection, no
+  launcher. The global-first work (ADRs 0001–0004, `setup-repertoire`,
+  `teardown-repertoire`, `install.sh`, `pid`) is preserved on the `global-first` branch.
+- **Triple-stack relationship clarified.** Repertoire = bare-metal essentials (syntax +
+  semantic guidance), a toolkit you call into. Station AI = a paradigm/framework for
+  building with AI (stations, domain experts, standard interfaces). Doti = large-scale
+  semantic layer, second brain, rich personhood backend — built using Station AI.
+  Repertoire is a build dependency for Station AI, not a runtime dependency for Doti.
+- **Bootstrap shifts from discovery to stance.** Under local-first, the project explicitly
+  opts in — the bootstrap doesn't need to nudge skill discovery. Instead it injects the
+  operative philosophy (fallibilism, collaboration, programming paradigm).
+- **Global has zero value.** The clone is a few hundred KB; re-downloading per project is
+  noise. A shared global clone creates a sync problem with no upside.
+- **CLI: both `npx`-style and installed binary.** Same tool, two access patterns.
+  `rep init` scaffolds a project; `rep add`/`rep update`/`rep remove` manage it.
 
-**Seed positions to grill (all are starting conjectures, per `fallibilism` — challenge them):**
+### Still open for next session
 
-- **Scope boundary.** Repertoire is the standalone base layer (Repertoire → Station AI →
-  Doti). Open: do general-purpose skills, workflow orchestration (open-shop/close-shop),
-  and the bibliography convention belong *in repertoire*, or above it? These are currently
-  parked as "post-v1" (see build queue items 2, 6, 7) without a firm ruling that they are
-  even in repertoire's remit.
-- **The worldview-injection gap (surfaced this session — strong grill material).** Only
-  `base/bootstrap.md` (a ~5-line "reach for skills proactively" nudge) is injected every
-  session. The philosophical standards — the actual substance of repertoire — reach the
-  agent *only* when a skill references them or the agent is told to apply them. So the
-  worldview repertoire stands for is **not** present by default. Question to resolve: should
-  the bootstrap carry the operative norms of `fallibilism` / `collaboration` /
-  `programming-paradigm` so the *stance* loads every session, or should repertoire stay a
-  skills-nudge + a referenced library? This bears directly on "what repertoire services".
-  (See also the "Standards structure note" near the end — injecting only operative norms.)
-- **Behaviour as a codified artefact.** If Adam's working preferences (autonomy, push-back,
-  ask-vs-act) are stable, they may belong as a standard or as bootstrap content rather than
-  living only in this handover's "Practical notes". The grill should decide whether to
-  `codify` them.
-- **Tooling remit.** What tooling repertoire should assume/provide versus leave to the
-  harness — connects to the delivery architecture just built (adapters wire the harness;
-  repertoire ships content, not tools).
+- **Agent behaviour** — autonomy level, push-back vs defer, ask-vs-act, narration.
+- **Human workflow** — how Adam wants to work day-to-day, tooling preferences.
+- **Grill those against the existing standards** (`collaboration`, `fallibilism`,
+  `programming-paradigm`) and decide what to codify.
 
-**Output expectation:** decisions crystallised into `CONTEXT.md` (language), `.plan/adr/`
-(scope/behaviour rulings), and possibly a new standard — not left as chat. `grill-with-docs`
-updates these inline; use it once a thread settles.
+### Build queue (local-first)
+
+1. **Design the `rep` CLI** — command surface, project scaffold layout, skill selection UX.
+2. **Design the per-project layout** — where repertoire content lives inside a project,
+   how harnesses wire to it.
+3. **Rewrite `base/bootstrap.md`** — shift from discovery nudge to operative stance
+   injection.
+4. **Build `rep`** — the CLI tool itself.
+5. **Reconcile existing skills/standards** — they're still valid content, just delivered
+   differently. `setup-repertoire` and `teardown-repertoire` stay on `global-first`;
+   new delivery skills replace them.
 
 ---
 
@@ -417,7 +374,7 @@ Full session research doc: `_work/2026-05-14_research-doc_delivery-mechanics-pid
 
 **Defined "v1 done" and executed the buildable parts.** The prior build queue was a
 sonnet-4-6 draft; the general-purpose skills backlog (grill-me, caveman, etc.) was
-*not* endorsed by Adam and is deliberately dropped from v1.
+_not_ endorsed by Adam and is deliberately dropped from v1.
 
 **v1 "done" definition (locked with Adam):**
 
@@ -505,7 +462,7 @@ agent":
 
 ### Architecture discussion (same session, 2026-07-02) — three-tier harness support
 
-**Adam's direction (stated this session):** he *does* want to support multiple harnesses.
+**Adam's direction (stated this session):** he _does_ want to support multiple harnesses.
 The paradigm-2 ideal is to offload environment specifics to the local AI. He proposed:
 do something explicit for a few major harnesses, a generic paradigm-2 catch-all for the
 rest, and — when the catch-all can't manage it — surface the failure and point the user
@@ -513,14 +470,14 @@ to set it up manually. This is a graceful-degradation ladder. It is the agreed *
 the detail below is the current-agent's refinement, mostly endorsed, with **one point
 still needing Adam's explicit yes** (the `install.sh` split — see end).
 
-**The key insight the ladder was missing.** The smoke test's tier-2 path *succeeded* —
+**The key insight the ladder was missing.** The smoke test's tier-2 path _succeeded_ —
 the cold agent wired Claude Code correctly by improvisation. The fragility is one level
 down and is **orthogonal to the tier count**: install is a creative forward act, but
-**teardown is a replay** — it must reverse *exactly and only* what install did, possibly
+**teardown is a replay** — it must reverse _exactly and only_ what install did, possibly
 on another machine / another agent / months later. Teardown can't re-improvise; it can
 only replay a record. So the load-bearing artefact is the **manifest** — the contract
 between two independent paradigm-2 acts. The round-trip was clean only because the agent
-*happened* to write a precise manifest. That "happened to" is the real problem: manifest
+_happened_ to write a precise manifest. That "happened to" is the real problem: manifest
 quality was luck, not enforced. **Install and teardown are asymmetric; naming that
 asymmetry is the design.**
 
@@ -532,21 +489,21 @@ asymmetry is the design.**
     skills are discoverable" — the testable target every tier aims at;
   - **manifest discipline as a hard requirement, not an emergent property of a capable
     agent** — every concrete mutation, exact path/file/line, whether it pre-existed. This
-    is what makes tier-2 improvisation *safe* rather than *lucky*;
+    is what makes tier-2 improvisation _safe_ rather than _lucky_;
   - **verification with teeth**: "loads every session" is only truly confirmable by a
-    *new* session; in-session file/symlink presence is a proxy. Skill should say so and
+    _new_ session; in-session file/symlink presence is a proxy. Skill should say so and
     hand the user a one-line self-check ("open a new session, ask if it sees the
     repertoire skills"). Tier 2 must confirm the end state or fall to tier 3.
-- **Tier 1 — explicit — specs, NOT adapters.** Distinguish a *launcher* (`pid`: runtime,
-  model injection, session start) from *wiring* (install-time static config). Most
+- **Tier 1 — explicit — specs, NOT adapters.** Distinguish a _launcher_ (`pid`: runtime,
+  model injection, session start) from _wiring_ (install-time static config). Most
   harnesses wire via static config (Claude Code = a `CLAUDE.md` import + a skills dir;
   Cursor similar) and need **no adapter** — just a concrete end-state spec so the manifest
-  is deterministic. Only pi is heavyweight because pi *also* has a launcher. So tier-1
+  is deterministic. Only pi is heavyweight because pi _also_ has a launcher. So tier-1
   support is cheap for static-config harnesses; write exact end states, don't build
   adapters you don't need.
 - **Tier 2 — generic paradigm-2 catch-all.** Agent maps the abstract wiring contract onto
   its own harness, **must** write a precise manifest, **must** verify the end state, and
-  falls to tier 3 if it can't identify a mechanism *or can't confirm the wiring worked*
+  falls to tier 3 if it can't identify a mechanism _or can't confirm the wiring worked_
   (not just "can't do it" — "can't verify it").
 - **Tier 3 — manual fallback.** Surface the failure honestly and hand the user the
   end-state spec to wire themselves (and note teardown is then manual too — symmetric).
@@ -565,8 +522,8 @@ This removes install.sh's hidden pi hard-coding and makes it an honest "no agent
 it was a sign the two paths had overlapping responsibilities. Adam ran out of time before
 confirming this split; **first thing to confirm on resume.**
 
-**Scope guidance for v1:** the *architecture* is cheap to decide now (it's just how
-`setup-repertoire` is structured + the `install.sh` split). *Populating* tier-1 is the
+**Scope guidance for v1:** the _architecture_ is cheap to decide now (it's just how
+`setup-repertoire` is structured + the `install.sh` split). _Populating_ tier-1 is the
 cost. For v1: lock the three-tier structure + manifest/verification hardening + the
 install.sh split; seed tier-1 with **pi (done) + Claude Code (now known from the smoke
 test)**; Cursor and the rest ride tier-2/3 until actually tested. **Resist growing
@@ -581,13 +538,14 @@ code changed — output is design docs in a new `.plan/` tree + `CONTEXT.md` + o
 doc. **These supersede the 2026-07-02 three-tier specifics.**
 
 **Settled and recorded (`.plan/adr/`):**
-- **0001 Storage/wiring split** — `~/.agent/` is neutral *storage*; "wiring" always means
-  a pointer into the *harness's own* config. pi is one adapter, not the core. Dissolves
+
+- **0001 Storage/wiring split** — `~/.agent/` is neutral _storage_; "wiring" always means
+  a pointer into the _harness's own_ config. pi is one adapter, not the core. Dissolves
   smoke-test findings #2/#3 architecturally.
 - **0002 Adapter model** — an Adapter is agent-written minimal wiring (static: import line
-  + skill registration; or a launcher like `pid`). B-spine + native-plugin opt-in. Clean
-  mode is launcher-only; static-wiring harnesses are Additive-only. *(Weighting under
-  review — see open item 1.)*
+  - skill registration; or a launcher like `pid`). B-spine + native-plugin opt-in. Clean
+  mode is launcher-only; static-wiring harnesses are Additive-only. _(Weighting under
+  review — see open item 1.)_
 - **0003 Delivery flows** — lifecycle ops (setup/teardown/update/doctor) are agent-driven
   interactive "CLI-style" flows; detect-then-confirm OS+harness; **one pass can wire
   multiple harnesses** (one Core, N adapters); `install.sh` is core-only + honest manual
@@ -599,11 +557,12 @@ doc. **These supersede the 2026-07-02 three-tier specifics.**
 
 **Key findings (in `.plan/reference/setup-scenarios.md` — capability matrix + a sample
 multi-harness manifest):**
+
 - The **End state is two independent capabilities** (bootstrap-loads; skills-discoverable),
   reported per-half.
 - **"What to do" is liftable from working integrations** (Superpowers manifests/hooks;
   Matt Pocock `link-skills.sh`); **"who does it" stays paradigm-2.** This reframes the
-  build as *adaptation of known-good recipes*, not invention.
+  build as _adaptation of known-good recipes_, not invention.
 - **The skills half is largely a solved standard problem:** the `skills` npm CLI supports
   72 agents; a big "Universal" cluster reads one standard dir `.agents/skills`
   (agentskills.io). Only Claude Code (`.claude/skills`) and pi (launcher) are special.
@@ -613,13 +572,14 @@ multi-harness manifest):**
   which may promote the plugin from opt-in to primary tier-1 recipe (open item 1).
 
 **Open for next session (all light, none blocking):**
-1. Re-weigh ADR-0002: lift Superpowers' plugin manifests as the *primary* tier-1 recipe
+
+1. Re-weigh ADR-0002: lift Superpowers' plugin manifests as the _primary_ tier-1 recipe
    for plugin-harnesses (keep hand-rolled for pi + no-plugin fallbacks)?
 2. Verify exact canonical `.agents/skills` paths (Global vs Project) in the agentskills.io
    standard; fold End-state-is-two-capabilities + Codex/Cursor corrections into ADR-0004.
 3. Housekeeping: does the `document-metadata` standard govern `.plan/` + `CONTEXT.md`, or
    are they exempt like README/`base/`? (Currently left frontmatter-free; the 2026-07-03
-   research doc *does* have frontmatter — reconcile.)
+   research doc _does_ have frontmatter — reconcile.)
 4. **Then step A** — rewrite `setup-repertoire` against the scenarios, then `install.sh`
    (core-only) + README, then re-run the cold-agent smoke test.
 
@@ -630,17 +590,18 @@ Nothing committed/pushed this session. New untracked: `CONTEXT.md`, `.plan/`,
 
 Built step A: rewrote the delivery machinery against the `.plan/` design. Prompted by
 Adam wanting to install pi + Claude Code on the Fedora laptop tonight and be able to
-install *and* uninstall both.
+install _and_ uninstall both.
 
 **Rewritten (working tree, not yet committed):**
+
 - **`skills/setup-repertoire/SKILL.md`** — full rewrite. Now: agent-as-CLI interactive
   flow; storage-vs-wiring split stated inline; end state = **two independent
   capabilities** (bootstrap-loads / skills-discoverable), reported per-half per-harness;
-  detect-then-confirm across *all* present harnesses (one pass, N adapters); concrete
+  detect-then-confirm across _all_ present harnesses (one pass, N adapters); concrete
   wiring for **pi** (pid launcher + PATH) and **Claude Code** (marker-block `@import`
   into `~/.claude/CLAUDE.md` + per-skill symlinks `~/.claude/skills/repertoire-<name>`);
   generic paradigm-2 path + manual fallback for the rest; **manifest discipline as a hard
-  requirement** with the per-adapter schema + *edited-shared-file* (marker-block) entry
+  requirement** with the per-adapter schema + _edited-shared-file_ (marker-block) entry
   kind; verification split into proxy (now) + live (new session) with a per-harness
   self-check.
 - **`skills/teardown-repertoire/SKILL.md`** — reverses per-adapter then core; handles the
@@ -648,7 +609,7 @@ install *and* uninstall both.
   a user-owned `CLAUDE.md` is kept even when emptied).
 - **`install.sh`** — now **core-only**: `~/.agent/` structure + clone + the two core
   symlinks + core manifest rows, then prints the wiring end-state and stops. Dropped the
-  unconditional `~/bin`/`pid` creation and PATH edit (those are the pi *adapter*, not
+  unconditional `~/bin`/`pid` creation and PATH edit (those are the pi _adapter_, not
   core). Dissolves smoke-test finding #3.
 - **`README.md`** — honest multi-harness framing; install.sh described as core-only.
 
@@ -663,13 +624,14 @@ artefacts in the harness — `$(cat)` stripping a trailing newline, and `grep`'s
 breaking an `&&` — not defects in the specs.)
 
 **Decisions taken (both affirm the ADRs):**
-- **Open item 1 resolved — NO.** Keep hand-rolled static wiring as the *primary* tier-1
+
+- **Open item 1 resolved — NO.** Keep hand-rolled static wiring as the _primary_ tier-1
   recipe for pi + Claude Code; the Claude Code plugin stays opt-in. This affirms ADR-0002
   as written and avoids the multi-manifest tax for v1. Revisit only if a third
   plugin-harness (Codex/Cursor) is actually brought into tier-1.
-- **Marker-delimited blocks standardised** for *all* shared-file edits (Claude `CLAUDE.md`,
+- **Marker-delimited blocks standardised** for _all_ shared-file edits (Claude `CLAUDE.md`,
   Codex `AGENTS.md`) — makes teardown deterministic (delete between markers) and realises
-  the ADR-0004 *edited-shared-file* entry kind.
+  the ADR-0004 _edited-shared-file_ entry kind.
 
 **Self-consistency:** touched files checked — UK English clean, perspective refs present,
 frontmatter complete + intent-language descriptions.
@@ -732,7 +694,7 @@ fall through) → tier 3 manual fallback (surface failure, hand user the end-sta
    `~/.claude/skills/<name>/SKILL.md` shape — note the current `~/.agent/skills/repertoire
    → skills/` symlink assumes pi's loader, finding #2); make manifest discipline a hard
    requirement for every tier; add a verification step + user self-check; specify the
-   tier-3 fall-through trigger ("can't identify a mechanism *or can't verify*").
+   tier-3 fall-through trigger ("can't identify a mechanism _or can't verify_").
 3. **Rework `install.sh`** to core-only per the split; drop the unconditional `~/bin`/`pid`
    creation and pi assumptions; have it print the manual (tier-3) wiring end-state.
 4. **Reconcile the README:** its "works with pi, Claude Code, Cursor, and any agent" claim
