@@ -1,0 +1,14 @@
+{
+  "name": "repertoire",
+  "version": "0.1.0",
+  "description": "Rational firmware for agent projects — standards, skills, and templates vendored into your project",
+  "type": "module",
+  "bin": {
+    "rep": "./bin/rep.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT",
+  "repository": "github:burnish-studio/repertoire"
+}

@@ -15,6 +15,20 @@ Read this in full before doing anything. Do not re-litigate settled decisions.
 
 ---
 
+## What was done this session (2026-07-03, session 5 — rep v0 review + fixes)
+
+Frontier review pass on the Phase 2 build, per the brief's requirement. Full write-up:
+`_work/2026-07-03_review_rep-v0-01--fable-5.md`. Three confirmed defects fixed in
+`bin/rep.mjs` (update claiming authored content into the lock; non-byte-identical
+restore; symlink clobbering of user dirs), plus smaller corrections. `test/rep-test.sh`
+extended to 10 tests (regressions 8–10), all passing. Live Claude Code smoke test
+passed (cold headless session in a scratch project: stance active, skills discoverable).
+Two accepted deviations from the brief documented in the review doc (all-or-nothing
+drift refusal on `update`; positional rather than unified stance diff). Committed and
+pushed to master.
+
+---
+
 ## Start here (updated 2026-07-03)
 
 **⚠ The global-first delivery architecture (ADRs 0001–0004, `~/.agent/`, `pid`,
@@ -72,10 +86,20 @@ Adam, recorded in ADR-0006/0007/0008 + a rewritten CONTEXT.md glossary:
   the brief line by line (frontier-model review pass).
 - README now opens with the product statement: "Rational firmware for agent projects."
 
-**Next session — execute Phase 2:** run the brief (delegate to sonnet-class; the brief
-is the entire context it needs), review, then live smoke test: `rep init` in a scratch
-project → fresh Claude Code + pi sessions → stance active, skills trigger; then stand
-it up inside Station AI (the real test). Still parked (deliberately, none blocking):
+**Phase 2 — DONE (2026-07-03, sessions 4–5).** The brief was executed by a
+deepseek-class model (receipt: `_work/2026-07-03_receipt_phase-2-build-01--fable-5.md`);
+a fresh fable then ran the required frontier review pass
+(`_work/2026-07-03_review_rep-v0-01--fable-5.md`). The review found and fixed **three
+confirmed defects** — `rep update` claimed authored standards into the lock (a later
+`remove --all` deleted user content), byte-identical restore failed on trailing
+whitespace, and `init`/`add` silently clobbered user-owned dirs at
+`.claude/skills/<name>` — plus smaller status/partial-state/cleanup fixes. Regression
+tests added (suite is now 10 tests, all passing). Claude Code live smoke test PASSES
+(cold headless session: stance block active, 4 skills discoverable, pointer import
+works; `rep status` clean).
+
+**Next:** pi-session smoke test + stand repertoire up inside Station AI (the real
+test) — both Adam-triggered. Still parked (deliberately, none blocking):
 agent-behaviour + human-workflow grill questions (feed future bootstrap tuning), the
 `model:` field decision, agentskills.io frontmatter compat check, practice skills
 (handover/grill/write-up/adr).
