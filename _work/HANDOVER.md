@@ -36,6 +36,10 @@ bootstrap+skills, teardown removed the marker block byte-clean leaving the user'
 session-2 log). The remaining gate is a real-machine test (Adam, pi + Claude Code on the
 Fedora laptop) and, optionally, a cold-agent smoke test of the new tier-2 path.
 
+**If you are a fresh session opened to run the workflow & scope grill, go straight to
+"Next session — workflow & scope grill (planned)" below** — that is the planned next work,
+and it is intentionally separate from the delivery thread above.
+
 **We are finishing repertoire to a shippable v1.** The "v1 done" definition is locked
 (see the 2026-07-01 session log below): install works + uninstall exists + manual
 fallback documented + the 5 existing meta-skills + public repo/README. General-purpose
@@ -69,6 +73,55 @@ gh-account gotcha at the bottom (`gh auth switch --user burnish-studio`).
 `teardown-repertoire` loop against a throwaway `$HOME`. The round-trip **passed cleanly**
 (nothing dangling; real `~/.agent` verified byte-identical before/after) — but surfaced
 that the non-pi path is under-specified, which is what opened thread 2.
+
+---
+
+## Next session — workflow & scope grill (planned, 2026-07-03)
+
+**This is the intended next piece of work, and it is deliberately a fresh session** (kept
+out of the delivery-architecture session so the context is clean). Adam wants a series of
+**`grill-me`** sessions — moving later to **`grill-with-docs`** + **`codify`** once positions
+firm up — on three linked questions:
+
+1. **How a good workflow should look — how Adam wants to work.** The freedoms, tooling, and
+   agent behaviour he wants day to day.
+2. **What freedoms/behaviour the agent should have** — autonomy level, when to push back vs
+   defer (this is exactly what `standards/collaboration/` governs), when to act vs ask,
+   how much to narrate.
+3. **The sensible scope of what repertoire should service** — where repertoire's remit ends
+   and the layers above it (Station AI, Doti) begin.
+
+**Reading for that agent (in order):** `CONTEXT.md` → the three philosophical standards
+(`fallibilism`, `collaboration`, `programming-paradigm` — these *are* the worldview under
+discussion) → the v1 scope + post-v1 deferrals below → this section.
+
+**Seed positions to grill (all are starting conjectures, per `fallibilism` — challenge them):**
+
+- **Scope boundary.** Repertoire is the standalone base layer (Repertoire → Station AI →
+  Doti). Open: do general-purpose skills, workflow orchestration (open-shop/close-shop),
+  and the bibliography convention belong *in repertoire*, or above it? These are currently
+  parked as "post-v1" (see build queue items 2, 6, 7) without a firm ruling that they are
+  even in repertoire's remit.
+- **The worldview-injection gap (surfaced this session — strong grill material).** Only
+  `base/bootstrap.md` (a ~5-line "reach for skills proactively" nudge) is injected every
+  session. The philosophical standards — the actual substance of repertoire — reach the
+  agent *only* when a skill references them or the agent is told to apply them. So the
+  worldview repertoire stands for is **not** present by default. Question to resolve: should
+  the bootstrap carry the operative norms of `fallibilism` / `collaboration` /
+  `programming-paradigm` so the *stance* loads every session, or should repertoire stay a
+  skills-nudge + a referenced library? This bears directly on "what repertoire services".
+  (See also the "Standards structure note" near the end — injecting only operative norms.)
+- **Behaviour as a codified artefact.** If Adam's working preferences (autonomy, push-back,
+  ask-vs-act) are stable, they may belong as a standard or as bootstrap content rather than
+  living only in this handover's "Practical notes". The grill should decide whether to
+  `codify` them.
+- **Tooling remit.** What tooling repertoire should assume/provide versus leave to the
+  harness — connects to the delivery architecture just built (adapters wire the harness;
+  repertoire ships content, not tools).
+
+**Output expectation:** decisions crystallised into `CONTEXT.md` (language), `.plan/adr/`
+(scope/behaviour rulings), and possibly a new standard — not left as chat. `grill-with-docs`
+updates these inline; use it once a thread settles.
 
 ---
 
