@@ -25,11 +25,16 @@ below (which is superseded in its specifics).** Read, in order:
 manifest) → the "2026-07-03 session" log entry below. The 2026-07-02 three-tier entry is
 kept for history but the ADRs supersede it.
 
-**One-line state:** the architectural spine is settled and recorded; nothing in
-`skills/`/`install.sh` has been rewritten yet. Next build step is "step A" — rewrite
-`setup-repertoire` against the scenarios. Working tree has uncommitted new files
-(`CONTEXT.md`, `.plan/`, the 2026-07-03 research doc) + this handover; nothing committed
-or pushed this session.
+**One-line state (updated 2026-07-03 session 2):** **step A is now built and
+locally verified.** `setup-repertoire`, `teardown-repertoire`, `install.sh`, and
+`README.md` have all been rewritten against the `.plan/` design (multi-harness, two
+capabilities, per-adapter manifest, core-only `install.sh`). A mechanical round-trip of
+the flagship scenario (pi + Claude Code, with a pre-existing `~/.claude/CLAUDE.md`)
+passed cleanly — install core-only, both adapters wired, `pid --doctor` saw
+bootstrap+skills, teardown removed the marker block byte-clean leaving the user's
+`CLAUDE.md` intact, nothing dangling. **Not yet committed/pushed** (see the 2026-07-03
+session-2 log). The remaining gate is a real-machine test (Adam, pi + Claude Code on the
+Fedora laptop) and, optionally, a cold-agent smoke test of the new tier-2 path.
 
 **We are finishing repertoire to a shippable v1.** The "v1 done" definition is locked
 (see the 2026-07-01 session log below): install works + uninstall exists + manual
@@ -567,6 +572,61 @@ multi-harness manifest):**
 
 Nothing committed/pushed this session. New untracked: `CONTEXT.md`, `.plan/`,
 `_work/2026-07-03_research-doc_harness-conventions-audit-01--opus-4-8.md`.
+
+## What was done this session (2026-07-03, session 2 — step A build)
+
+Built step A: rewrote the delivery machinery against the `.plan/` design. Prompted by
+Adam wanting to install pi + Claude Code on the Fedora laptop tonight and be able to
+install *and* uninstall both.
+
+**Rewritten (working tree, not yet committed):**
+- **`skills/setup-repertoire/SKILL.md`** — full rewrite. Now: agent-as-CLI interactive
+  flow; storage-vs-wiring split stated inline; end state = **two independent
+  capabilities** (bootstrap-loads / skills-discoverable), reported per-half per-harness;
+  detect-then-confirm across *all* present harnesses (one pass, N adapters); concrete
+  wiring for **pi** (pid launcher + PATH) and **Claude Code** (marker-block `@import`
+  into `~/.claude/CLAUDE.md` + per-skill symlinks `~/.claude/skills/repertoire-<name>`);
+  generic paradigm-2 path + manual fallback for the rest; **manifest discipline as a hard
+  requirement** with the per-adapter schema + *edited-shared-file* (marker-block) entry
+  kind; verification split into proxy (now) + live (new session) with a per-harness
+  self-check.
+- **`skills/teardown-repertoire/SKILL.md`** — reverses per-adapter then core; handles the
+  marker-block reversal (delete block between markers; honour the `[pre-existed]` flag so
+  a user-owned `CLAUDE.md` is kept even when emptied).
+- **`install.sh`** — now **core-only**: `~/.agent/` structure + clone + the two core
+  symlinks + core manifest rows, then prints the wiring end-state and stops. Dropped the
+  unconditional `~/bin`/`pid` creation and PATH edit (those are the pi *adapter*, not
+  core). Dissolves smoke-test finding #3.
+- **`README.md`** — honest multi-harness framing; install.sh described as core-only.
+
+**Verified locally (mechanical simulation against a throwaway `$HOME`):** flagship
+scenario pi + Claude Code with a **pre-existing** `~/.claude/CLAUDE.md` carrying the
+user's own content. Result: core-only install correct (no `~/bin`, no pid symlink); both
+adapters wired; `pid --doctor` saw bootstrap + skills; teardown removed the marker block
+**byte-identical** to the original CLAUDE.md (user content survived), removed all 6 skill
+symlinks + pid symlink + PATH line + core symlinks + clone + dirs + manifest; final sweep
+found zero repertoire artefacts. (Two apparent test failures were both shell-scripting
+artefacts in the harness — `$(cat)` stripping a trailing newline, and `grep`'s exit-code
+breaking an `&&` — not defects in the specs.)
+
+**Decisions taken (both affirm the ADRs):**
+- **Open item 1 resolved — NO.** Keep hand-rolled static wiring as the *primary* tier-1
+  recipe for pi + Claude Code; the Claude Code plugin stays opt-in. This affirms ADR-0002
+  as written and avoids the multi-manifest tax for v1. Revisit only if a third
+  plugin-harness (Codex/Cursor) is actually brought into tier-1.
+- **Marker-delimited blocks standardised** for *all* shared-file edits (Claude `CLAUDE.md`,
+  Codex `AGENTS.md`) — makes teardown deterministic (delete between markers) and realises
+  the ADR-0004 *edited-shared-file* entry kind.
+
+**Self-consistency:** touched files checked — UK English clean, perspective refs present,
+frontmatter complete + intent-language descriptions.
+
+**Still open (unchanged, none block tonight):** open item 2 (canonical `.agents/skills`
+Global/Project paths — only affects Codex/Cursor tier, deferred); open item 3 (does
+`document-metadata` govern `.plan/` + `CONTEXT.md` — left frontmatter-free pending Adam's
+call). **Not yet done:** commit + **push to master** (required before the laptop test —
+the setup instruction fetches raw `SKILL.md` from master; needs the `burnish-studio`
+gh-account switch), and optionally a cold-agent smoke test of the new tier-2 path.
 
 ## Build queue — in dependency order
 

@@ -2,243 +2,266 @@
 type: skill
 title: Setup Repertoire
 name: setup-repertoire
-description: Use when asked to install, set up, or configure repertoire on this machine. Guides through the complete interactive setup process for any harness and operating system.
+description: Use when asked to install, set up, or configure repertoire on this machine. Drives the interactive setup as a CLI for the user — detects OS and every present harness, wires each one, records a reversible manifest, and verifies both capabilities load.
 created: 2026-05-13
-updated: 2026-05-15
+updated: 2026-07-03
 status: current
-model: sonnet-4-6
+model: claude-opus-4-8
 ---
 
 # Setup Repertoire
 
 _Perspective: [standards/perspective/STANDARD.md](../../standards/perspective/STANDARD.md)_
 
-Repertoire is a collection of agent skills, standards, and templates delivered as a
-git repository. Setup means cloning it, establishing the `~/.agent/` structure, and
-wiring it into the active harness so that bootstrap and skills load in every future
-session.
+Repertoire is a standalone body of agent skills, standards, and templates — the **Core** —
+delivered as a git repository. Setup installs the Core into neutral storage, then wires it
+into each agent harness on this machine so its content loads in every future session.
+
+You are the installer. This is an interactive flow: you act as a CLI for the user —
+detecting the environment, confirming before acting, narrating as you go, and verifying the
+result. Not silent automation, and not a rigid script: reach the end state described here
+using your knowledge of this machine.
+
+---
+
+## Two ideas that shape everything below
+
+**Storage is separate from wiring.** The Core lives in neutral storage at `~/.agent/`,
+owned by no harness. **Wiring** always means placing a pointer into a *harness's own* config
+(`~/.claude/`, `~/.codex/`, a launcher on `PATH`) so that harness loads the Core itself.
+`~/.agent/` is not a universal load path — only the `pid` launcher reads it directly. Every
+other harness reads its own directory. So one Core is wired by one **Adapter** per harness,
+and several adapters can coexist, all pointing at the same Core.
+
+**The end state is two independent capabilities**, satisfied and verified separately for
+each harness:
+
+1. **Bootstrap loads every session** — Repertoire's proactivity instruction (`base/bootstrap.md`)
+   is in context at every session start.
+2. **Skills are discoverable** — Repertoire's skills can be invoked when relevant.
+
+Some harnesses do both natively; some do one and degrade the other. Report each half
+honestly per harness — never claim a capability you have not wired and verified.
 
 ---
 
 ## Capabilities check — do this first
 
-Before anything else, confirm:
+Confirm you can:
 
-1. You can read and write files on the local file system
-2. You can execute shell commands
-3. `git` is available
+1. Read and write files on the local file system
+2. Execute shell commands
+3. Run `git`
 
-If any of these fail, stop immediately and tell the user:
+If any fails, stop and tell the user:
 
-> "This agent lacks the capabilities needed to install repertoire — file system
-> access and shell execution are both required. Run this setup from an agent with
-> full tool access (pi, Claude Code, Cursor with terminal, or equivalent). A
-> web-only agent cannot complete this installation."
+> "This agent lacks the capabilities needed to install repertoire — file system access and
+> shell execution are both required. Run this setup from an agent with full tool access (pi,
+> Claude Code, Cursor with terminal, or equivalent). A web-only agent cannot complete this."
 
-You must not proceed past this point. You must not attempt partial setup.
-
----
-
-## Environment assessment
-
-Establish before presenting a plan:
-
-- **Harness** — what agent harness is this session running in?
-- **OS and shell** — Linux/Mac/Windows (WSL?); bash/zsh/other
-- **Existing `~/.agent/` directory** — does it exist? What's in it?
-- **Existing repo clone** — is repertoire already cloned somewhere?
-- **`~/bin` on PATH** — relevant for pi/Unix users only
+Do not proceed past this point. Do not attempt a partial setup.
 
 ---
 
-## The end state
+## Detect the environment — then confirm
 
-Three things must be true when setup is complete:
+Establish the facts before proposing anything. Detect; do not assume you already know your
+own harness or the machine's shape.
 
-1. **Bootstrap loads in every session** — `~/.agent/base/bootstrap.md` exists (as a
-   symlink to the repo) and the harness is configured to load it globally
-2. **Skills are visible** — `~/.agent/skills/repertoire/` exists (symlink to repo's
-   `skills/`) and the harness registers it as a skill source
-3. **Verification passes** — a new session shows the skills listed and the bootstrap
-   instruction active
+- **OS and shell** — Linux / macOS / Windows (WSL counts as Linux); bash / zsh / fish.
+- **Harnesses present** — inspect for evidence of each, because one pass can wire *several*:
+  - **pi** — the `pi` binary on `PATH`, `~/.pi/`.
+  - **Claude Code** — the `claude` binary, `~/.claude/`.
+  - **Codex** — `~/.codex/`.
+  - **Cursor** — `~/.cursor/`, or a project `.cursor/`.
+- **Existing Core** — is `~/.agent/` already present? Is repertoire already cloned?
+- **Existing harness config** — does `~/.claude/CLAUDE.md` already exist (it must survive)?
+  Is `~/bin` on `PATH` (pi only)?
 
-How to achieve this is harness-specific. You know how your harness loads global
-context and discovers skills — apply that knowledge to reach this end state.
-Consult `bin/agent-core.sh` and `bin/pid` in the cloned repo for the pi/Unix
-reference implementation.
+Then present what you found and what you propose, and **wait for confirmation**:
 
----
+- The OS, shell, and every harness you detected — and which ones you propose to wire.
+- The default Core location `~/.agent/repos/repertoire/`.
+- In plain terms, the wiring each harness will get.
 
-## The setup conversation
-
-Present a plan before doing anything. Do not execute silently.
-
-**After assessment, present:**
-
-- What you found (harness, OS, whether repo already exists)
-- What you are about to do, in plain terms
-- The default repo location: `~/.agent/repos/repertoire/`
-- Ask: "Shall I proceed, or would you like to change anything?"
-
-You must wait for confirmation before acting.
-
-**During execution, narrate each step:**
-
-```
-→ Creating ~/.agent/ structure... done
-→ Cloning repertoire to ~/.agent/repos/repertoire/... done
-→ Symlinking bootstrap.md into ~/.agent/base/... done
-→ Symlinking skills/ into ~/.agent/skills/repertoire/... done
-→ Wiring harness to load bootstrap and skills...
-→ Writing install manifest to ~/.agent/install-manifest.md... done
-```
-
-Record each change in the manifest as you make it — see "Record the install" below.
-
-**Decision points — surface these, give a recommendation, wait for answer:**
-
-| Decision               | Default recommendation                                                                                                                                  |
-| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Repo location          | `~/.agent/repos/repertoire/` — keeps it with other managed repos                                                                                        |
-| `~/bin` not on PATH    | Add it now using your shell's method: bash/zsh: `export PATH="$HOME/bin:$PATH"` in `.bashrc`/`.zshrc`; fish: `fish_add_path $HOME/bin` in `config.fish` |
-| Install `pid` launcher | Yes, for pi users on Unix — see below                                                                                                                   |
-
-You must not ask about things that have no sensible alternative. Surface only real choices.
+Ask: "Shall I proceed, or would you like to change anything?" Do not act before the user
+answers. Surface only real choices — never ask about things with one sensible answer.
 
 ---
 
-## The `~/.agent/` structure
+## Step 1 — Install the Core (harness-agnostic)
 
-```
-~/.agent/
-  base/           ← always loaded; no signal suppresses this
-  prompts/        ← global prompts; loaded every session
-  skills/         ← skill directories; always additive
-  repos/          ← managed git clones live here
-```
-
-Create this structure if it does not exist. Use symlinks into the repo clone — not
-copies — so that `pid --update` or `git pull` in the repo propagates immediately
-with no re-linking.
+This part is deterministic and identical for every machine: the neutral storage layout, the
+clone, and the two core symlinks that give the Core stable paths independent of repo
+internals.
 
 ```bash
 mkdir -p ~/.agent/{base,prompts,skills,repos}
 git clone https://github.com/burnish-studio/repertoire ~/.agent/repos/repertoire
 ln -sfn ~/.agent/repos/repertoire/base/bootstrap.md ~/.agent/base/bootstrap.md
-ln -sfn ~/.agent/repos/repertoire/skills ~/.agent/skills/repertoire
+ln -sfn ~/.agent/repos/repertoire/skills            ~/.agent/skills/repertoire
 ```
 
----
+Use symlinks, not copies, so a later `git pull` in the clone propagates with no re-linking.
+`install.sh` in the repo does exactly this core step and writes the core rows of the
+manifest — you may run it instead of doing the above by hand. It does **only** the Core; all
+harness wiring below is yours.
 
-## Harness wiring
-
-The specific mechanism varies. The target is constant: bootstrap content and the
-skills path load automatically in every new session, without any manual flags.
-
-For **pi on Unix**: the `pid` launcher handles this. See the pid section below.
-
-For **other harnesses**: use your knowledge of how that harness loads global context.
-Common patterns:
-
-- A global config file the harness reads on start (e.g. `~/.claude/CLAUDE.md`)
-- A settings file that accepts skill or context paths
-- A directory the harness watches for skill definitions
-
-If the harness has no mechanism for global context injection, tell the user and
-recommend a per-project workaround using a `.agent/` directory in their project root.
-Refer them to `docs/agent-dir.md` in the repo for the local override mechanism.
+Record what you created versus what pre-existed as you go — see "The manifest".
 
 ---
 
-## pid — optional, pi/Unix only
+## Step 2 — Wire each detected harness (one Adapter each)
 
-`pid` is a convenience launcher for pi users on Unix. It automatically loads
-`~/.agent/` content on every session. Without it, the user passes `--skill` and
-`--append-system-prompt` flags manually on every launch.
+For every harness the user confirmed, satisfy both capabilities using that harness's own
+integration surface, and record the exact wiring in the manifest. Below are the concrete
+end states for the harnesses supported explicitly; for anything else, use the generic path.
 
-Offer this only to pi users on Unix/Mac. Do not mention it to users on other harnesses.
+### pi — launcher
+
+pi takes launch flags, not passive config, so its adapter is the `pid` launcher. It reads
+the neutral storage directly and passes it to pi on every launch — satisfying **both**
+capabilities at once, and it is the only harness that can also do **Clean** mode
+(`--no-context-files`, suppressing the user's own context for that session).
 
 ```bash
-ln -sfn ~/.agent/repos/repertoire/bin/pid ~/bin/pid
+ln -sfn ~/.agent/repos/repertoire/bin/pid ~/bin/pid   # create ~/bin if absent
 chmod +x ~/.agent/repos/repertoire/bin/pid
 ```
 
-After installing: "Open a new terminal and run `pid` to start your first configured
-session. Run `pid --doctor` to see exactly what loads."
+If `~/bin` is not on `PATH`, add it with the user's shell's method — bash/zsh:
+`export PATH="$HOME/bin:$PATH"` in `~/.bashrc` / `~/.zshrc`; fish:
+`fish_add_path $HOME/bin` in `~/.config/fish/config.fish` — and record the exact line and
+file in the manifest. Offer `pid` only to pi users; never mention it to others.
+
+### Claude Code — static wiring
+
+Claude Code reads its own `~/.claude/` directory and needs **no launcher**. Wire both halves
+statically:
+
+- **Bootstrap** — append a marker-delimited block importing the bootstrap into
+  `~/.claude/CLAUDE.md` (create the file if absent). The markers make teardown exact:
+
+  ```markdown
+  <!-- repertoire:start -->
+  @~/.agent/repos/repertoire/base/bootstrap.md
+  <!-- repertoire:end -->
+  ```
+
+  Never rewrite the rest of `CLAUDE.md` — the user's own memory must survive untouched.
+- **Skills** — symlink each skill directory into `~/.claude/skills/` under a `repertoire-`
+  prefix, so Claude Code discovers each at `~/.claude/skills/repertoire-<name>/SKILL.md`
+  and the prefix avoids colliding with the user's own skills:
+
+  ```bash
+  for d in ~/.agent/repos/repertoire/skills/*/; do
+    name=$(basename "$d")
+    ln -sfn "$d" ~/.claude/skills/repertoire-"$name"
+  done
+  ```
+
+Claude Code is Additive only — static wiring cannot suppress the user's own context. (An
+optional Claude Code plugin could register the whole skills dir at once; it is never
+required, so prefer the symlinks above unless the user asks for the plugin.)
+
+### Any other harness — generic paradigm-2 path
+
+You know how this harness loads global context and discovers skills. Map the two
+capabilities onto its own integration surface:
+
+- **Bootstrap** — find the file it reads every session (a global instructions / memory /
+  rules file). Append a **marker-delimited block** (`<!-- repertoire:start -->` …
+  `<!-- repertoire:end -->`) — importing `base/bootstrap.md` if the file supports imports,
+  otherwise inlining the bootstrap text. Never overwrite a shared file the user owns.
+- **Skills** — register the Core's `skills/` with whatever skills mechanism it exposes. If
+  it has none, degrade honestly: reference the skills index inside the bootstrap block
+  and/or drop selected skills into its prompts directory, and report the skills half as
+  **partial**.
+
+Record every file, line, and symlink exactly, with its pre-existence flag.
+
+### When you cannot wire it — manual fallback
+
+If you cannot identify a mechanism, **or cannot verify the wiring worked** (see
+Verification), do not fake success. Tell the user which half failed, hand them the concrete
+end state to apply by hand, and record what you *did* manage plus a note that the rest is
+manual (so teardown is likewise manual for that part). A no-agent install is this tier by
+definition.
 
 ---
 
-## Record the install — the manifest
+## The manifest — the contract teardown depends on
 
-As you make each change, record it in an install manifest at
-`~/.agent/install-manifest.md`. This is the agent's own log of what it did, and it is
-what `teardown-repertoire` reads to reverse the installation cleanly. Write it as you
-go, not from memory afterwards.
+As you work, write `~/.agent/install-manifest.md`. This is the load-bearing record:
+`teardown-repertoire` reverses **exactly and only** what it lists, possibly on another
+machine or months later, with no chance to re-improvise. A vague manifest makes teardown
+either unsafe (removes something pre-existing) or incomplete (leaves one harness dangling).
+Precision here is not optional — write it as you act, not from memory after.
 
-**Record only what you actually did.** If `~/.agent/` already existed, setup did not
-create it — do not list it. Teardown removes exactly what the manifest records and
-nothing else, so a pre-existing directory must never appear here. This is the one rule
-that keeps uninstall safe.
-
-Group entries by kind so each is reversible on its own:
+Structure it as Core rows plus one section per Adapter. Every entry records the exact path,
+the exact line/symlink/flag, and **whether it pre-existed**. Use the *edited shared file*
+entry kind — a marker-delimited block — for any in-place edit to a file the user may own
+(`CLAUDE.md`, `AGENTS.md`); its reversal is "delete the block between the markers", and it
+carries a `[file pre-existed]` flag so teardown knows whether to remove the emptied file.
 
 ```markdown
 # Repertoire — Install Manifest
+Written by setup on <UTC timestamp>. Reverses via teardown-repertoire.
+Anything not listed here was pre-existing and must not be touched.
 
-Written by setup on <date>. Records every change setup made to this system.
-`teardown-repertoire` reverses these; anything not listed here was pre-existing and
-must not be touched.
-
-## Directories created
-- ~/.agent/ (with base/ prompts/ skills/ repos/) — created because absent
+## Core (deterministic)
+### Directories created
+- ~/.agent/ (base/ prompts/ skills/ repos/) — created because absent
 - ~/bin/ — created because absent
-
-## Repository cloned
+### Repository cloned
 - ~/.agent/repos/repertoire/ ← git clone of https://github.com/burnish-studio/repertoire
-
-## Symlinks created
+### Symlinks created
 - ~/.agent/base/bootstrap.md → ~/.agent/repos/repertoire/base/bootstrap.md
 - ~/.agent/skills/repertoire → ~/.agent/repos/repertoire/skills
-- ~/bin/pid → ~/.agent/repos/repertoire/bin/pid (pi/Unix only)
 
-## PATH / shell config
-- Appended `export PATH="$HOME/bin:$PATH"` to ~/.bashrc
+## Adapter: pi (launcher)
+- symlink ~/bin/pid → ~/.agent/repos/repertoire/bin/pid
+- PATH: appended `export PATH="$HOME/bin:$PATH"` to ~/.bashrc
+- bootstrap + skills: satisfied at launch by pid; no static edit
 
-## Harness wiring
-- <harness-specific: e.g. registered skills path in ~/.claude/settings.json>
+## Adapter: claude-code (static wiring)
+- edited shared file ~/.claude/CLAUDE.md [pre-existed: yes] — added marker block
+  `<!-- repertoire:start -->` … `<!-- repertoire:end -->`; reverse = delete that block
+- symlink ~/.claude/skills/repertoire-audit          → …/skills/audit
+- symlink ~/.claude/skills/repertoire-codify         → …/skills/codify
+- symlink ~/.claude/skills/repertoire-write-a-skill  → …/skills/write-a-skill
+  [one per skill]
 ```
 
-Omit any section with nothing to record (e.g. no manifest entry for `~/bin` if it was
-already present and on PATH). Keep each entry concrete enough that a reversal needs no
-guessing: exact paths, exact lines added, exact files edited.
+Omit any section with nothing to record. If a directory or the clone already existed, say so
+(`already present — leave in place on teardown`) rather than listing it as created.
 
 ---
 
-## Verification
+## Verification — per half, with teeth
 
-You must not declare setup complete until you have verified the end state. Two steps:
+Do not declare setup complete until you have confirmed the end state. In-session file and
+symlink checks are only a proxy — "loads every session" is truly confirmed only by a *new*
+session. So verify in two passes, per harness:
 
-**1. Manifest check** — run `pid --doctor` (pi users) or the harness equivalent.
-Confirm bootstrap and skills path both appear. If either is missing, diagnose and
-fix before continuing.
+**1. Proxy check (now).** Confirm the wiring exists: the core symlinks resolve; each
+harness's bootstrap edit and skills registration are in place. For pi, run `pid --doctor`
+and confirm bootstrap and skills both appear. Fix anything missing before continuing.
 
-**2. Session check** — tell the user: "Open a new session now. The skills from
-repertoire should be listed as available. Try asking the agent to do something
-where a skill applies — it should announce which skill it is using."
+**2. Live check (new session).** Hand the user a one-line self-check per harness:
 
-You must wait for the user to confirm this works. If it does not, diagnose before finishing.
-You must not hand off a broken setup.
+> "Open a new <harness> session and ask it whether it can see the repertoire skills, and
+> whether the repertoire bootstrap instruction is active. Both should be yes."
+
+If a harness cannot confirm a half, treat that half as unwired: fix it, or fall to the
+manual fallback and say so plainly. Do not hand off a setup you have not verified.
 
 ---
 
 ## End of setup
 
-Summarise what was done in three to five lines. Tell the user:
-
-- Where the repo lives
-- How to update: `pid --update` (pi) or `cd ~/.agent/repos/repertoire && git pull`
-- How to uninstall: ask any capable agent to run `teardown-repertoire`, which reads
-  the manifest and reverses every change interactively
-- What to expect in the next session
-
-You must not pad. If everything went smoothly, say so and stop.
+Summarise in three to five lines: which harnesses were wired and to what degree (per half),
+where the Core lives, how to update (`pid --update`, or `cd ~/.agent/repos/repertoire &&
+git pull`), and how to uninstall (ask any capable agent to run `teardown-repertoire`, which
+reads the manifest and reverses every change). State honestly anything left partial or
+manual. Do not pad — if it went cleanly, say so and stop.

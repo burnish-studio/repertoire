@@ -33,26 +33,30 @@ Set up repertoire on this machine:
 https://raw.githubusercontent.com/burnish-studio/repertoire/master/skills/setup-repertoire/SKILL.md
 ```
 
-The agent fetches the skill, checks capabilities, assesses the environment, and walks
-through setup interactively. Works with pi, Claude Code, Cursor, and any agent that
-can read files and run shell commands. Web-only agents cannot complete this
-installation — the skill will say so immediately.
+The agent fetches the skill, checks capabilities, detects your OS and every agent
+harness on the machine, and wires each one in a single interactive pass — recording a
+reversible manifest as it goes. It has explicit support for **pi** (via the `pid`
+launcher) and **Claude Code** (via `~/.claude/` wiring), and a generic path for any
+other harness that loads global context and discovers skills. Web-only agents cannot
+complete this installation — the skill will say so immediately.
 
 **Requirements:** git, an agent with file system access and shell execution.
 
 ### Manual install (no agent)
 
-If you would rather run it yourself, clone the repo and run the installer. It creates
-the `~/.agent/` structure, clones into it, symlinks bootstrap/skills/pid, and writes
-an install manifest:
+The Core installs the same everywhere; only the per-harness wiring differs. If you would
+rather run it yourself, clone the repo and run the installer. It does the harness-agnostic
+**Core** — the `~/.agent/` storage layout, the clone, the core symlinks, and the core rows
+of the install manifest — then prints the wiring end-state for your harness(es):
 
 ```
 git clone https://github.com/burnish-studio/repertoire ~/.agent/repos/repertoire
 bash ~/.agent/repos/repertoire/install.sh
 ```
 
-The installer is idempotent — safe to re-run to update. Harness wiring beyond pid is
-harness-specific; the agent-driven path above handles it for you.
+The installer is idempotent — safe to re-run to update. It deliberately does **no** harness
+wiring (with no agent to detect and record it, wiring is yours to apply from the printed
+end-state). The agent-driven path above detects and wires every harness for you.
 
 ### Uninstall
 
