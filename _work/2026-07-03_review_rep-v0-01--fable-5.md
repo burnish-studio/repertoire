@@ -1,5 +1,5 @@
 ---
-type: review
+type: context
 title: rep v0 — frontier review pass and live smoke test
 created: 2026-07-03
 updated: 2026-07-03

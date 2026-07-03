@@ -34,11 +34,21 @@ dependency — not installed globally and auto-injected everywhere. Starting emp
 including deliberately is the point: the context window is the most expensive resource
 in agentic engineering.
 
-The delivery tool (`rep`) is in development. It will scaffold repertoire into a
-project (`rep init`), keep it updated against a pinned version (`rep update`), and
-remove it cleanly (`rep remove`). Until it ships, the content is usable directly:
-clone the repo and copy the skills and standards you want into your project's agent
-configuration.
+From the project root:
+
+```bash
+npx -y github:burnish-studio/repertoire init
+```
+
+This vendors the standards, templates, and a chosen set of skills into `.agents/`,
+injects the stance block into `AGENTS.md`, wires Claude Code (a `CLAUDE.md` pointer
+plus `.claude/skills` symlinks), and records everything it owns in
+`.agents/repertoire.lock`. `rep update` refreshes against the latest version and
+prints a diff of the stance block; `rep remove --all` reverses the install
+byte-clean, leaving anything the project authored in place.
+
+The full walkthrough — day-to-day commands, the vendored/authored ownership rule,
+and the authoring loop — is in [`docs/consumer-guide.md`](docs/consumer-guide.md).
 
 The previous global installation model (a `~/.agent/` convention, the `pid` launcher,
 and agent-driven setup/teardown flows) is superseded — see `.plan/adr/0005` — and
@@ -72,3 +82,7 @@ standards it asserts. To check conformance: `skills/audit/SKILL.md`.
 Read `standards/programming-paradigm/STANDARD.md` before adding anything. Then
 `skills/write-a-skill/SKILL.md` before writing a skill. The short version: describe
 what done looks like, not how to get there.
+
+Working on the repertoire itself — adding standards or skills, changing `rep`,
+the session workflow — is covered in
+[`docs/maintainer-guide.md`](docs/maintainer-guide.md).

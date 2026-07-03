@@ -27,6 +27,14 @@ Two accepted deviations from the brief documented in the review doc (all-or-noth
 drift refusal on `update`; positional rather than unified stance diff). Committed and
 pushed to master.
 
+Same session, later: wrote the two usage guides — `docs/consumer-guide.md` (install,
+ownership rule, day-to-day commands, the authoring loop in a host project) and
+`docs/maintainer-guide.md` (self-application ground rules, artefact ontology, norm
+compilation constraints, rep invariants + test gate, session workflow, shipping).
+README install section updated from "rep is in development" to the real `npx` flow,
+with links to both guides. Review doc frontmatter `type:` corrected to `context`
+(`review` is not an allowed value in `templates/frontmatter/`).
+
 ---
 
 ## Start here (updated 2026-07-03)
